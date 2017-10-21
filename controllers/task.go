@@ -5,8 +5,9 @@ import (
 	"sir/lib/config"
 	"sir/models"
 
-	"github.com/astaxie/beego"
 	"sir/task"
+
+	"github.com/astaxie/beego"
 )
 
 var TaskManager *task.TaskManager
@@ -73,16 +74,22 @@ func (task *TaskController) Show() {
 func (task *TaskController) List() {
 	// beego.Error("list")
 
+	runningTasks := TaskManager.Tasks
+
 	taskConfigs := config.ListAllTaskConfigs()
 
 	tasks := make([]models.Task, 0, 10)
 	for _, c := range taskConfigs {
-		tasks = append(tasks, models.Task{
-			TaskConfig: &c,
-		})
-	}
 
-	// TODO add task state
+		if t, ok := runningTasks[c.Name]; ok {
+			tasks = append(tasks, *(t.Task))
+		} else {
+			temp := c
+			tasks = append(tasks, models.Task{
+				TaskConfig: &temp,
+			})
+		}
+	}
 
 	task.Data["json"] = map[string][]models.Task{
 		"data": tasks,
