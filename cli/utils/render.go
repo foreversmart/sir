@@ -17,6 +17,7 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 		[]string{Style.Title("EXEC"), taskConfig.Cmd},
 		[]string{Style.Title("WATCH"), Format.Enabled(taskConfig.Watch)},
 		[]string{Style.Title("WATCH_DIR"), taskConfig.WatchDir},
+		// []string{Style.Title("ENV"), taskConfig.Env},
 	})
 
 	table.Render()

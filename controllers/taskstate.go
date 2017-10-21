@@ -52,7 +52,7 @@ func GetTaskState(pid int32) (taskState *models.TaskState, err error) {
 		return
 	}
 	// inject the net BytesSent and BytesRecv
-	taskState.Net = net[0]
+	taskState.Net = &net[0]
 
 	io, err := pro.IOCounters()
 	if err != nil {
