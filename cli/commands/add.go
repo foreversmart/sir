@@ -9,6 +9,7 @@ import (
 	"sir/cli/utils"
 	"sir/lib/httpclient"
 	"sir/models"
+	"strings"
 
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -93,12 +94,21 @@ func ActionAdd(c *cli.Context) error {
 	}
 
 	// 获取可执行文件路径
-	cmd, err := utils.ExecFileAbsPath(opts.Cmd)
+
+	temp := models.Task{
+		TaskConfig: &models.TaskConfig{
+			Cmd: opts.Cmd,
+		},
+	}
+	path, args := temp.ParseCmd()
+	abspath, err := utils.ExecFileAbsPath(path)
+	cmd := append([]string{abspath}, args...)
+
 	if err != nil {
 		fmt.Printf("ERROR: can not find exec bin, %v \n", err)
 		os.Exit(0)
 	}
-	opts.Cmd = cmd
+	opts.Cmd = strings.Join(cmd, " ")
 
 	// 调用api
 	var response map[string]models.TaskConfig

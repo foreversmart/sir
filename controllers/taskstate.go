@@ -12,7 +12,7 @@ func GetTaskState(pid int32) (taskState *models.TaskState, err error) {
 	taskState = &models.TaskState{}
 
 	// inject the pid
-	taskState.Pid = pid
+	taskState.Pid = int(pid)
 
 	pro, err := process.NewProcess(pid)
 	if err != nil {
