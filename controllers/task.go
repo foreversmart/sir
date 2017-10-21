@@ -35,10 +35,16 @@ func (task *TaskController) Add() {
 // @router /task/:name [delete]
 func (task *TaskController) Remove() {
 	taskname := task.Ctx.Input.Param(":name")
-	config.DeleteTaskConfig(taskname)
-	// TODO handle error
+	err := config.DeleteTaskConfig(taskname)
+	if err != nil {
+		beego.Error(err)
+	}
 
-	// TODO update mem
+	// update task runtime
+	err = TaskManager.StopTask(taskname)
+	if err != nil {
+		beego.Error(err)
+	}
 
 	task.ServeJSON()
 }
@@ -61,12 +67,18 @@ func (task *TaskController) Rename() {
 func (task *TaskController) Show() {
 	taskname := task.Ctx.Input.Param(":name")
 
-	taskConfig, _ := config.GetTaskConfig(taskname)
-	// TODO handle error
+	tasks := TaskManager.Tasks
+	if t, ok := tasks[taskname]; ok {
+		task.Data["json"] = map[string]interface{}{"data": *t.Task}
+	} else {
+		taskConfig, err := config.GetTaskConfig(taskname)
+		if err != nil {
+			beego.Error("config.GetTaskConfig", err)
+			return
+		}
+		task.Data["json"] = map[string]interface{}{"data": *taskConfig}
+	}
 
-	// TODO get task state info
-
-	task.Data["json"] = map[string]interface{}{"data": *taskConfig}
 	task.ServeJSON()
 }
 

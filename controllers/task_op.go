@@ -14,7 +14,6 @@ func (task *TaskController) Start() {
 		beego.Error("should have task name ")
 		return
 	}
-	beego.Info("start", taskname)
 
 	conf, err := config.GetTaskConfig(taskname)
 	if err != nil {
@@ -26,21 +25,51 @@ func (task *TaskController) Start() {
 		TaskConfig: conf,
 	})
 	if err != nil {
-		beego.Error(err)
+		beego.Error("TaskManager.StartTask", err)
 	}
 }
 
 // @router /task/:name/restart [post]
 func (task *TaskController) Restart() {
+	taskname := task.Ctx.Input.Param(":name")
+	if taskname == "" {
+		beego.Error("should have task name ")
+		return
+	}
 
+	err := TaskManager.RemoveTask(taskname)
+	if err != nil {
+		beego.Error("TaskManager.RemoveTask", err)
+	}
+
+	conf, err := config.GetTaskConfig(taskname)
+	if err != nil {
+		beego.Error("config.GetTaskConfig, ", err)
+		return
+	}
+
+	err = TaskManager.StartTask(&models.Task{
+		TaskConfig: conf,
+	})
+	if err != nil {
+		beego.Error("TaskManager.StartTask", err)
+	}
 }
 
 // @router /task/:name/stop [post]
 func (task *TaskController) Stop() {
+	taskname := task.Ctx.Input.Param(":name")
+	if taskname == "" {
+		beego.Error("should have task name ")
+		return
+	}
 
+	err := TaskManager.RemoveTask(taskname)
+	if err != nil {
+		beego.Error("TaskManager.RemoveTask", err)
+	}
 }
 
 // @router /task/:name/send [post]
 func (task *TaskController) Send() {
-
 }

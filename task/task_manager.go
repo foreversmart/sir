@@ -92,8 +92,8 @@ func (t *TaskManager) AddTask(task *TaskRuntime) {
 
 }
 
-func (t *TaskManager) RemoveTask(task *TaskRuntime) (err error) {
-	err = t.StopTask(task.Name)
+func (t *TaskManager) RemoveTask(taskName string) (err error) {
+	err = t.StopTask(taskName)
 	if err != nil {
 		return
 	}
@@ -101,7 +101,7 @@ func (t *TaskManager) RemoveTask(task *TaskRuntime) (err error) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 
-	delete(t.Tasks, task.Name)
+	delete(t.Tasks, taskName)
 	return
 }
 

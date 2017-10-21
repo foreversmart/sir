@@ -8,17 +8,32 @@ func (task *TaskController) Statistics() {
 // @router /task/:name/log [get]
 func (task *TaskController) Log() {
 	taskname := task.Ctx.Input.Param(":name")
-	// TODO just open editor
 
-	println(taskname)
-	task.Data["json"] = map[string]interface{}{"data": "/Users/alex/Desktop/log.log"}
+	t := TaskManager.Tasks[taskname]
+	task.Data["json"] = map[string]interface{}{
+		"err": t.StdErrPath,
+		"std": t.StdOutPath,
+	}
 
 	task.ServeJSON()
 }
 
 // @router /task/log [get]
 func (task *TaskController) AllLog() {
-	task.Data["json"] = map[string]interface{}{"data": "/Users/alex/Desktop/log.log"}
+	tasks := TaskManager.Tasks
+
+	errLogs := []string{}
+	stdLogs := []string{}
+
+	for _, t := range tasks {
+		errLogs = append(errLogs, t.StdErrPath)
+		stdLogs = append(stdLogs, t.StdOutPath)
+	}
+
+	task.Data["json"] = map[string]interface{}{
+		"errs": errLogs,
+		"stds": stdLogs,
+	}
 
 	task.ServeJSON()
 }

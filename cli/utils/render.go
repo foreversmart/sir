@@ -123,7 +123,7 @@ func RenderTaskList(list []models.Task, c *cli.Context) {
 			v[2] = strconv.Itoa(int(t.Pid))
 			v[3] = Style.Success("running")
 
-			seconds := (int64(time.Now().Sub(time.Unix(t.UpTime, 0))) / 1e9) * 1e9
+			seconds := (int64(time.Now().Sub(time.Unix(t.UpTime/1000, 0))) / 1e9) * 1e9
 			v[5] = time.Duration(seconds).String()
 			v[6] = humanize.FormatFloat("###.##", t.CpuPercent) + " %"
 			v[7] = humanize.Bytes(t.Mem)
@@ -148,13 +148,17 @@ func RenderTaskState(task *models.TaskState, c *cli.Context) {
 	table.Append([]string{Style.Title("LOAD"), humanize.FormatFloat("###.##", task.Load)})
 	table.Append([]string{Style.Title("STAT"), task.Stat})
 
-	table.Append([]string{Style.Title("DISK_IO"), "R    " + humanize.Bytes(task.IoCounter.ReadBytes)})
-	table.Append([]string{"", "W    " + humanize.Bytes(task.IoCounter.WriteBytes)})
+	if task.IoCounter != nil {
+		table.Append([]string{Style.Title("DISK_IO"), "R    " + humanize.Bytes(task.IoCounter.ReadBytes)})
+		table.Append([]string{"", "W    " + humanize.Bytes(task.IoCounter.WriteBytes)})
+	}
 
-	table.Append([]string{Style.Title("NETWORK_IO"), "SENT " + humanize.Bytes(task.Net.BytesSent)})
-	table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
+	if task.Net != nil {
+		table.Append([]string{Style.Title("NETWORK_IO"), "SENT " + humanize.Bytes(task.Net.BytesSent)})
+		table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
+	}
 
-	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime, 0))) / 1e9) * 1e9
+	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime/1000, 0))) / 1e9) * 1e9
 	table.Append([]string{Style.Title("UP_TIME"), time.Duration(seconds).String()})
 
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
