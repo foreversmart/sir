@@ -46,9 +46,9 @@ func initApp() *cli.App {
 }
 
 const CustomAppHelpTemplate = `
-___________ 
-/ __/  _/ _ \ 
-_\ \_/ // , _/
+   ___________ 
+  / __/  _/ _ \ 
+ _\ \_/ // , _/
 /___/___/_/|_|    v{{.Version}}
 							 
 
@@ -60,14 +60,14 @@ Usage: {{if .UsageText}}{{.UsageText}}{{else}}{{.HelpName}} {{if .VisibleFlags}}
 
 Commands: {{range .VisibleCategories}}{{if .Name}}
 
-{{.Name}}:{{end}}{{range .VisibleCommands}}
-{{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}{{end}}{{if .VisibleFlags}}
+	> {{.Name}}:{{end}}{{range .VisibleCommands}}
+		{{join .Names ", "}} {{.UsageText}}{{"\t"}}{{.Usage}}{{end}}{{end}}{{if .VisibleFlags}}
 
 
 Global Options:
 
-{{range $index, $option := .VisibleFlags}}{{if $index}}
-{{end}}{{$option}}{{end}}{{end}}{{if .Copyright}}
+	{{range $index, $option := .VisibleFlags}}{{if $index}}
+	{{end}}{{$option}}{{end}}{{end}}{{if .Copyright}}
 
 
 Copyright:
