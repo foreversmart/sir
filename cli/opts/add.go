@@ -37,11 +37,13 @@ func ParseAddOpts(c *cli.Context) *AddOpts {
 
 	return &AddOpts{
 		TaskConfig: &models.TaskConfig{
-			Cmd:      c.Args().First(),
-			Name:     c.String("name"),
-			Watch:    watch,
-			WatchDir: watchdir,
-			Env:      env,
+			Cmd:        c.Args().First(),
+			Name:       c.String("name"),
+			Watch:      watch,
+			WatchDir:   watchdir,
+			Env:        env,
+			Rules:      []*models.RuleConfig{},
+			LogConfigs: &models.LogConfig{},
 		},
 	}
 }

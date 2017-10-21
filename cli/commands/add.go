@@ -2,10 +2,13 @@ package commands
 
 import (
 	"fmt"
+	"net/http"
 	"os"
-	"sir/cli/mock"
+	"sir/cli/config"
 	"sir/cli/opts"
 	"sir/cli/utils"
+	"sir/lib/httpclient"
+	"sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -97,8 +100,12 @@ func ActionAdd(c *cli.Context) error {
 	}
 	opts.Cmd = cmd
 
-	// TODO send command to sird daemon
-	taskConfig := mock.GetTaskConfig()
+	// 调用api
+	var response map[string]models.TaskConfig
+	httpclient.Client.DoJSON(http.MethodPost, config.ApiPath("/task/add"), opts, &response)
+	// TODO handle error
+
+	taskConfig := response["data"]
 
 	// 输出结果
 	utils.RenderTaskConfig(&taskConfig, c)
