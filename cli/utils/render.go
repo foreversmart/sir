@@ -174,3 +174,7 @@ func RenderTask(task *models.Task, c *cli.Context) {
 
 	RenderTaskConfig(task.TaskConfig, c)
 }
+
+func RenderStatistics(statistics []models.Statistics, c *cli.Context) {
+	println("TODO: RENDER STATISTICS")
+}
