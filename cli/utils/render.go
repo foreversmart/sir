@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"sir/models"
 	"sort"
 	"strconv"
@@ -13,6 +14,8 @@ import (
 )
 
 func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
+	fmt.Println(Style.Header(" # TASK CONFIG INFO:"))
+
 	table := tablewriter.NewWriter(c.App.Writer)
 
 	table.SetRowLine(false)
@@ -125,4 +128,8 @@ func RenderTaskList(list []models.Task, c *cli.Context) {
 	}
 
 	table.Render() // Send output
+}
+
+func RenderTask(task *models.Task, c *cli.Context) {
+	println(task.Name)
 }

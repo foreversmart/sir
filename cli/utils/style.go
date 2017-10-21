@@ -25,3 +25,7 @@ func (_ *_Style) Fail(text string) string {
 func (_ *_Style) Disabled(text string) string {
 	return chalk.Dim.TextStyle(text)
 }
+
+func (_ *_Style) Header(text string) string {
+	return chalk.Black.NewStyle().WithBackground(chalk.White).WithTextStyle(chalk.Bold).Style(text)
+}
