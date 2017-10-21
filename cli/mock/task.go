@@ -14,7 +14,7 @@ func GetTaskConfig() models.TaskConfig {
 		Cmd:             "/home/alex/hackathon/server",
 		Watch:           true,
 		WatchDir:        "/home/alex/hackathon/",
-		Env:             map[string]string{"MODE": "dev", "path": "/xxx"},
+		Env:             []string{"MODE=dev", "path=/xxx"},
 		Workspace:       "",
 		User:            "alex",
 		Group:           "alex",

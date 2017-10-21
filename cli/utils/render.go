@@ -34,8 +34,7 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 	table.Append([]string{Style.Title("RESTART_COUNT"), string(taskConfig.RestartCount)})
 
 	// ENV
-	envs := Format.KVMap(taskConfig.Env)
-	for i, env := range envs {
+	for i, env := range taskConfig.Env {
 		key := " "
 		if i == 0 {
 			key = Style.Title("ENV")
