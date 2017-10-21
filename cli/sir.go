@@ -33,6 +33,10 @@ func initApp() *cli.App {
 	}
 
 	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "host, s",
+			Usage: "specify the daemon server address",
+		},
 		cli.BoolFlag{
 			Name:  "help, h",
 			Usage: "show help",

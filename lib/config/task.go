@@ -1,6 +1,7 @@
 package config
 
 import (
+	"io/ioutil"
 	"os"
 	"os/user"
 	"runtime"
@@ -16,7 +17,7 @@ import (
 var (
 	AppHome        = UserHomeDir() + "/.sir"
 	taskConfigPath = UserHomeDir() + "/.sir/configs"
-	defaultLogPath = UserHomeDir() + "/.sir/logs"
+	DefaultLogPath = UserHomeDir() + "/.sir/logs"
 )
 
 func CreateTaskConfig(params *models.TaskConfig) (err error) {
@@ -27,10 +28,10 @@ func CreateTaskConfig(params *models.TaskConfig) (err error) {
 
 	params.CTime = time.Now()
 	if params.LogConfigs.ErrLogPath == "" {
-		params.LogConfigs.ErrLogPath = defaultLogPath
+		params.LogConfigs.ErrLogPath = DefaultLogPath
 	}
 	if params.LogConfigs.StdLogPath == "" {
-		params.LogConfigs.StdLogPath = defaultLogPath
+		params.LogConfigs.StdLogPath = DefaultLogPath
 	}
 	if params.LogConfigs.RotateType == "" {
 		params.LogConfigs.RotateType = "day"
@@ -96,4 +97,24 @@ func UserHomeDir() string {
 		return home
 	}
 	return os.Getenv("HOME")
+}
+
+func ListAllTaskConfigs() []models.TaskConfig {
+	ret := []models.TaskConfig{}
+
+	files, err := ioutil.ReadDir(taskConfigPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		config := models.TaskConfig{}
+		_, err = toml.DecodeFile(taskConfigPath+"/"+f.Name(), &config)
+		if err != nil {
+			log.Printf("toml.DecodeFile(%s, conf): %v", taskConfigPath+"/"+f.Name(), err)
+		}
+		ret = append(ret, config)
+	}
+
+	return ret
 }
