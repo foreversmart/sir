@@ -13,7 +13,7 @@ var CmdAttach = cli.Command{
 }
 
 func ActionAttach(c *cli.Context) error {
-	taskName := c.Args().First()
+	// taskName := c.Args().First()
 	// TODO check inputs
 
 	// // 调用api

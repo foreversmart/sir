@@ -14,31 +14,36 @@ import (
 
 var CmdLog = cli.Command{
 	Name:      "log",
-	UsageText: "[<task>]",
+	UsageText: "<task> [--type \"err\"|\"std\"]",
 	Category:  string(TaskCategory),
-	Usage:     "stream logs file. Default stream all tasks logs",
+	Usage:     "stream task logs. default is std log",
 	Action:    ActionLog,
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "type",
+			Usage: "log type, err | std, default is out",
+		},
+	},
 }
 
 func ActionLog(c *cli.Context) error {
 	taskName := c.Args().First()
+	logType := c.String("type")
+	if logType == "" {
+		logType = "std"
+	}
 
 	var response map[string]string
 
-	if taskName == "" {
-		httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task/"+taskName+"/log"), nil, &response)
-	} else {
-		httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task/log"), nil, &response)
-	}
-
+	httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task/"+taskName+"/log"), nil, &response)
 	// TODO handle error
 
-	configPath := response["data"]
+	path := response[logType]
 
 	editorPath, _ := exec.LookPath("tail")
 	// TODO handle error
 
-	cmd := exec.Command(editorPath, "-f", configPath)
+	cmd := exec.Command(editorPath, "-f", path)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

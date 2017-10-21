@@ -72,5 +72,4 @@ func (task *TaskController) Stop() {
 
 // @router /task/:name/send [post]
 func (task *TaskController) Send() {
-
 }
