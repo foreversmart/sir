@@ -1,8 +1,33 @@
 package controllers
 
+import (
+	"sir/lib/config"
+	"sir/models"
+
+	"github.com/astaxie/beego"
+)
+
 // @router /task/:name/start [post]
 func (task *TaskController) Start() {
+	taskname := task.Ctx.Input.Param(":name")
+	if taskname == "" {
+		beego.Error("should have task name ")
+		return
+	}
+	beego.Info("start", taskname)
 
+	conf, err := config.GetTaskConfig(taskname)
+	if err != nil {
+		beego.Error("config.GetTaskConfig, ", err)
+		return
+	}
+
+	err = TaskManager.StartTask(&models.Task{
+		TaskConfig: conf,
+	})
+	if err != nil {
+		beego.Error(err)
+	}
 }
 
 // @router /task/:name/restart [post]

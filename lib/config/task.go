@@ -3,7 +3,6 @@ package config
 import (
 	"io/ioutil"
 	"os"
-	"os/user"
 	"runtime"
 	"sir/lib/errors"
 	"sir/models"
@@ -37,13 +36,13 @@ func CreateTaskConfig(params *models.TaskConfig) (err error) {
 		params.LogConfigs.RotateType = "day"
 	}
 
-	if params.User == "" {
-		user, _ := user.Current()
-		params.User = user.Username
-	}
-	if params.Group == "" {
-		params.Group = params.User
-	}
+	// if params.User == "" {
+	// 	user, _ := user.Current()
+	// 	params.User = user.Username
+	// }
+	// if params.Group == "" {
+	// 	params.Group = params.User
+	// }
 
 	err = os.MkdirAll(taskConfigPath, 0700)
 	if err != nil {

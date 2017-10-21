@@ -48,6 +48,10 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 		return
 	}
 
+	if task.TaskState == nil {
+		task.TaskState = &models.TaskState{}
+	}
+
 	// set work space
 	var (
 		workspace string
@@ -90,6 +94,7 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 
 		uitInt, _ := strconv.ParseUint(taskUser.Uid, 32, 10)
 		attr.Credential.Uid = uint32(uitInt)
+		attr.Credential.NoSetGroups = true
 	}
 
 	// set group
@@ -105,6 +110,7 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 
 		groupInt, _ := strconv.ParseUint(taskGroup.Gid, 32, 10)
 		attr.Credential.Gid = uint32(groupInt)
+		attr.Credential.NoSetGroups = true
 	}
 
 	// start task
@@ -159,6 +165,10 @@ func (t *TaskManager) RemoveTask(task *TaskRuntime) (err error) {
 
 func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
 	flows = make([]*os.File, 3)
+
+	// TODO handle error
+	os.MkdirAll(t.Workspace, 0700)
+
 	flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return flows, err
