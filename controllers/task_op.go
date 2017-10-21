@@ -32,12 +32,43 @@ func (task *TaskController) Start() {
 
 // @router /task/:name/restart [post]
 func (task *TaskController) Restart() {
+	taskname := task.Ctx.Input.Param(":name")
+	if taskname == "" {
+		beego.Error("should have task name ")
+		return
+	}
 
+	err := TaskManager.StopTask(taskname)
+	if err != nil {
+		beego.Error("TaskManager.StopTask", err)
+	}
+
+	conf, err := config.GetTaskConfig(taskname)
+	if err != nil {
+		beego.Error("config.GetTaskConfig, ", err)
+		return
+	}
+
+	err = TaskManager.StartTask(&models.Task{
+		TaskConfig: conf,
+	})
+	if err != nil {
+		beego.Error("TaskManager.StartTask", err)
+	}
 }
 
 // @router /task/:name/stop [post]
 func (task *TaskController) Stop() {
+	taskname := task.Ctx.Input.Param(":name")
+	if taskname == "" {
+		beego.Error("should have task name ")
+		return
+	}
 
+	err := TaskManager.StopTask(taskname)
+	if err != nil {
+		beego.Error(err)
+	}
 }
 
 // @router /task/:name/send [post]
