@@ -1,6 +1,7 @@
 package config
 
 import (
+	"io/ioutil"
 	"os"
 	"os/user"
 	"runtime"
@@ -96,4 +97,24 @@ func UserHomeDir() string {
 		return home
 	}
 	return os.Getenv("HOME")
+}
+
+func ListAllTaskConfigs() []models.TaskConfig {
+	ret := []models.TaskConfig{}
+
+	files, err := ioutil.ReadDir(taskConfigPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		config := models.TaskConfig{}
+		_, err = toml.DecodeFile(taskConfigPath+"/"+f.Name(), &config)
+		if err != nil {
+			log.Printf("toml.DecodeFile(%s, conf): %v", taskConfigPath+"/"+f.Name(), err)
+		}
+		ret = append(ret, config)
+	}
+
+	return ret
 }

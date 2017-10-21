@@ -65,7 +65,7 @@ func (task *TaskController) Show() {
 
 // @router /task [get]
 func (task *TaskController) List() {
-	beego.Error("list")
+	// beego.Error("list")
 
 	task.Data["json"] = map[string][]models.Task{
 		"data": mock.GetTaskList(),
