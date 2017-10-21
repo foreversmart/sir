@@ -26,7 +26,6 @@ var CliCmds = []cli.Command{
 	CmdShow,
 	CmdSend,
 	CmdLog,
-	CmdMonit,
 
 	// service cmds
 	CmdKill,
