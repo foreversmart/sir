@@ -1,6 +1,12 @@
 package commands
 
 import (
+	"fmt"
+	"net/http"
+	"sir/cli/config"
+	"sir/cli/utils"
+	"sir/lib/httpclient"
+
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -13,5 +19,13 @@ var CmdRestart = cli.Command{
 }
 
 func ActionRestart(c *cli.Context) error {
+	taskName := c.Args().First()
+
+	var response map[string]interface{}
+	httpclient.Client.DoJSON(http.MethodPost, config.ApiPath("/task/"+taskName+"/restart"), nil, &response)
+
+	println()
+	fmt.Println(utils.Style.Success("[INFO]"), "TASK", utils.Style.Title(taskName), "RESTARTED", "\n")
+
 	return nil
 }

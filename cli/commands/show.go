@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"net/http"
 	"sir/cli/config"
 	"sir/cli/utils"
@@ -26,7 +25,7 @@ func ActionShow(c *cli.Context) error {
 	httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task/"+taskName), nil, &response)
 	// TODO handle error
 
-	fmt.Println(response)
+	// fmt.Println(response)
 	task := response["data"]
 
 	utils.RenderTask(&task, c)
