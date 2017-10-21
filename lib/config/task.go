@@ -1,4 +1,4 @@
-package controllers
+package config
 
 import (
 	"os"
@@ -49,4 +49,8 @@ func GetTaskConfig(taskName string) (config *models.TaskConfig, err error) {
 
 func DeleteTaskConfig(taskName string) error {
 	return os.Remove(taskConfigPath + "/" + taskName + ".toml")
+}
+
+func GetTaskConfigFilePath(taskName string) string {
+	return taskConfigPath + "/" + taskName + ".toml"
 }
