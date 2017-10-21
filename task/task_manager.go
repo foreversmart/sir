@@ -184,6 +184,7 @@ func (t *TaskManager) GenerateTaskFlow(name string) (flows []*TaskFlow, err erro
 
 	flowPath := path.Join(t.Workspace, name+".temp.in")
 
+	flows[0] = &TaskFlow{}
 	flows[0].FilePath = flowPath
 	flows[0].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -192,6 +193,7 @@ func (t *TaskManager) GenerateTaskFlow(name string) (flows []*TaskFlow, err erro
 
 	flowPath = path.Join(t.Workspace, name+".temp.stdout")
 
+	flows[1] = &TaskFlow{}
 	flows[1].FilePath = flowPath
 	flows[1].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -200,6 +202,7 @@ func (t *TaskManager) GenerateTaskFlow(name string) (flows []*TaskFlow, err erro
 
 	flowPath = path.Join(t.Workspace, name+".temp.stderr")
 
+	flows[2] = &TaskFlow{}
 	flows[2].FilePath = flowPath
 	flows[2].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
