@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"sir/cli/mock"
 	"sir/lib/config"
 	"sir/models"
 
@@ -67,8 +66,19 @@ func (task *TaskController) Show() {
 func (task *TaskController) List() {
 	// beego.Error("list")
 
+	taskConfigs := config.ListAllTaskConfigs()
+
+	tasks := make([]models.Task, 0, 10)
+	for _, c := range taskConfigs {
+		tasks = append(tasks, models.Task{
+			TaskConfig: &c,
+		})
+	}
+
+	// TODO add task state
+
 	task.Data["json"] = map[string][]models.Task{
-		"data": mock.GetTaskList(),
+		"data": tasks,
 	}
 	task.ServeJSON()
 }
