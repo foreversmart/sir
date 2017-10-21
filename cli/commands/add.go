@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"os"
+	"sir/cli/mock"
 	"sir/cli/opts"
 	"sir/cli/utils"
 
@@ -41,6 +42,10 @@ func ActionAdd(c *cli.Context) error {
 	opts.Cmd = cmd
 
 	// TODO send command to sird daemon
+	taskConfig := mock.GetTaskConfig()
+
+	// 输出结果
+	utils.RenderTaskConfig(&taskConfig, c)
 
 	return nil
 }

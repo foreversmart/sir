@@ -34,7 +34,7 @@ type TaskConfig struct {
 	AutoStart       bool              `json:"auto_start"`
 	RestartInterval int               `json:"restart_interval"` // seconds
 	Rules           []*RuleConfig     `json:"rules"`
-	LogConfigs      []*LogConfig      `json:"log_configs"`
+	LogConfigs      *LogConfig        `json:"log_configs"`
 
 	//
 	CTime        time.Time `json:"c_time"`
