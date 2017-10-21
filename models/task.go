@@ -47,6 +47,10 @@ type TaskConfig struct {
 	RestartCount int       `json:"restart_count"`
 }
 
+func (conf *TaskConfig) IsValid() bool {
+	return conf.Name != ""
+}
+
 type RuleConfig struct {
 	Type      string  `json:"type"`
 	Threshold float64 `json:"threshold"`
