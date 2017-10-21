@@ -83,6 +83,7 @@ func GetTaskList() []models.Task {
 	task2.TaskState = nil
 	task2.TaskConfig.Name = "notrunning"
 	return []models.Task{
+		task2,
 		task1,
 	}
 }

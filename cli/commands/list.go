@@ -1,6 +1,9 @@
 package commands
 
 import (
+	"sir/cli/mock"
+	"sir/cli/utils"
+
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -13,5 +16,10 @@ var CmdList = cli.Command{
 }
 
 func ActionList(c *cli.Context) error {
+	// TODO call sir daemon
+	list := mock.GetTaskList()
+
+	utils.RenderTaskList(list, c)
+
 	return nil
 }
