@@ -7,8 +7,8 @@ import (
 var CmdMonit = cli.Command{
 	Name:      "monit",
 	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	Category:  string(TaskCategory),
+	Usage:     "launch termcaps monitoring",
 	Action:    ActionMonit,
 }
 

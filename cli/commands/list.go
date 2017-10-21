@@ -7,8 +7,8 @@ import (
 var CmdList = cli.Command{
 	Name:      "list",
 	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	Category:  string(TaskCategory),
+	Usage:     "list all tasks",
 	Action:    ActionList,
 }
 

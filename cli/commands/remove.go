@@ -6,9 +6,9 @@ import (
 
 var CmdRemove = cli.Command{
 	Name:      "remove",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task>",
+	Category:  string(ConfigCategory),
+	Usage:     "remove a task config by name",
 	Action:    ActionRemove,
 }
 

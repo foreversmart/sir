@@ -6,9 +6,9 @@ import (
 
 var CmdUpdate = cli.Command{
 	Name:      "update",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task>",
+	Category:  string(ConfigCategory),
+	Usage:     "update task configs with default editor",
 	Action:    ActionUpdate,
 }
 

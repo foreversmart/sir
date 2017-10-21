@@ -7,8 +7,8 @@ import (
 var CmdStatus = cli.Command{
 	Name:      "status",
 	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	Category:  string(ServiceCategory),
+	Usage:     "show sir daemon detail status",
 	Action:    ActionStatus,
 }
 

@@ -7,8 +7,8 @@ import (
 var CmdKill = cli.Command{
 	Name:      "kill",
 	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	Category:  string(ServiceCategory),
+	Usage:     "kill sir daemon process",
 	Action:    ActionKill,
 }
 

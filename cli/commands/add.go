@@ -6,9 +6,9 @@ import (
 
 var CmdAdd = cli.Command{
 	Name:      "add",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<cmd> [extra params]",
+	Category:  string(ConfigCategory),
+	Usage:     "create a task config by params",
 	Action:    ActionAdd,
 }
 

@@ -6,9 +6,9 @@ import (
 
 var CmdLog = cli.Command{
 	Name:      "log",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "[<task>] [-from <fromtime>] [-to <endtime>]",
+	Category:  string(TaskCategory),
+	Usage:     "stream logs file. Default stream all tasks logs",
 	Action:    ActionLog,
 }
 

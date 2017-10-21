@@ -6,9 +6,9 @@ import (
 
 var CmdStart = cli.Command{
 	Name:      "start",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task>",
+	Category:  string(TaskCategory),
+	Usage:     "start and daemonize a task",
 	Action:    ActionStart,
 }
 

@@ -6,9 +6,9 @@ import (
 
 var CmdSend = cli.Command{
 	Name:      "send",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task> -m \"xxx\"",
+	Category:  string(TaskCategory),
+	Usage:     "send stdin to a task process",
 	Action:    ActionSend,
 }
 

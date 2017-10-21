@@ -6,9 +6,9 @@ import (
 
 var CmdRestart = cli.Command{
 	Name:      "restart",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task>",
+	Category:  string(TaskCategory),
+	Usage:     "restart a task",
 	Action:    ActionRestart,
 }
 

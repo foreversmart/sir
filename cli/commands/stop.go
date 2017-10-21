@@ -6,9 +6,9 @@ import (
 
 var CmdStop = cli.Command{
 	Name:      "stop",
-	UsageText: "",
-	Category:  "",
-	Usage:     "",
+	UsageText: "<task>",
+	Category:  string(TaskCategory),
+	Usage:     "stop a task (to start it again, do sir restart <task>)",
 	Action:    ActionStop,
 }
 
