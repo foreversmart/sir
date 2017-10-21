@@ -5,6 +5,7 @@ import (
 
 	"github.com/shirou/gopsutil/net"
 	"github.com/shirou/gopsutil/process"
+	"strings"
 )
 
 type Task struct {
@@ -13,8 +14,18 @@ type Task struct {
 	*TaskConfig
 }
 
+func (t *Task) ParseCmd() (cmd string, args []string) {
+	items := strings.Split(t.Cmd, " ")
+	cmd = items[0]
+	if len(items) > 1 {
+		args = items[1:]
+	}
+
+	return
+}
+
 type TaskState struct {
-	Pid        int32                   `json:"pid"`
+	Pid        int                     `json:"pid"`
 	CpuPercent float64                 `json:"cpu"`
 	Mem        uint64                  `json:"mem"` // Kb
 	MemPercent float32                 `json:"mem"`
