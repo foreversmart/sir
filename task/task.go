@@ -2,18 +2,11 @@ package task
 
 import (
 	"fmt"
-	"sir/lib/psutil"
-	"sir/models"
-	"time"
-
-	"log"
 	"os"
-	"os/signal"
-	"sir/lib/config"
+	"os/user"
+	"sir/models"
+	"strconv"
 	"syscall"
-
-	readline "github.com/jprichardson/readline-go"
-	"github.com/natefinch/lumberjack"
 )
 
 type TaskRuntime struct {
@@ -22,6 +15,7 @@ type TaskRuntime struct {
 	TaskStdLogSignal   chan bool
 	TaskErrorLogSignal chan bool
 	TaskStateSignal    chan bool
+	TaskWatchSignal    chan bool
 }
 
 func NewTaskRuntime(task *models.Task) *TaskRuntime {
@@ -30,131 +24,93 @@ func NewTaskRuntime(task *models.Task) *TaskRuntime {
 		TaskStdLogSignal:   make(chan bool),
 		TaskErrorLogSignal: make(chan bool),
 		TaskStateSignal:    make(chan bool),
+		TaskWatchSignal:    make(chan bool),
 	}
 
 	return taskRuntime
 }
 
-func (t *TaskRuntime) TaskLog() {
+func (task *TaskRuntime) Start() (err error) {
+	// set work space
+	var (
+		workspace string
+	)
 
-	// deal with std log
-	go func() {
-		logger := &lumberjack.Logger{
-			Filename:   config.DefaultLogPath + "/log.log",
-			MaxSize:    10, // megabytes
-			MaxBackups: 0,
-			MaxAge:     0, //days
-		}
-
-		log.SetOutput(logger)
-
-		readline.ReadLine(t.Task.TaskFlows.StdOut, func(line string) {
-
-			grSignal := make(chan bool)
-
-			select {
-			case <-t.TaskStdLogSignal:
-				grSignal <- true
-				return
-			}
-
-			logger.Write([]byte(line))
-
-			c := make(chan os.Signal, 1)
-			signal.Notify(c, syscall.SIGHUP)
-
-			go func() {
-				for {
-
-					select {
-					case <-grSignal:
-						return
-					}
-
-					<-c
-					logger.Rotate()
-				}
-			}()
-		})
-	}()
-
-	// deal with error log
-	go func() {
-		logger := &lumberjack.Logger{
-			Filename:   config.DefaultLogPath + "/error.log",
-			MaxSize:    10, // megabytes
-			MaxBackups: 0,
-			MaxAge:     0, //days
-		}
-
-		log.SetOutput(logger)
-
-		readline.ReadLine(t.Task.TaskFlows.StdErr, func(line string) {
-
-			grSignal := make(chan bool)
-
-			select {
-			case <-t.TaskErrorLogSignal:
-				grSignal <- true
-				return
-			}
-
-			logger.Write([]byte(line))
-
-			c := make(chan os.Signal, 1)
-			signal.Notify(c, syscall.SIGHUP)
-
-			go func() {
-				for {
-
-					select {
-					case <-grSignal:
-						return
-					}
-
-					<-c
-					logger.Rotate()
-				}
-			}()
-		})
-	}()
-}
-
-func (t *TaskRuntime) TaskStateFunc() {
-	for {
-		select {
-		// killz
-		case <-t.TaskStateSignal:
-			return
-
-		default:
-			state, err := psutil.TaskState(t.Pid)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			if state == nil {
-				state = &models.TaskState{
-					Pid: t.Pid,
-				}
-			}
-
-			// update task state
-			t.TaskState = state
-
-			time.Sleep(time.Second)
-		}
+	dir, _ := os.Getwd()
+	workspace = dir
+	if task.Workspace != "" {
+		workspace = task.Workspace
 	}
+
+	// set env
+	env := os.Environ()
+	env = append(env, task.Env...)
+
+	// set uid
+	attr := syscall.SysProcAttr{}
+	if task.User != "" {
+		taskUser, err := user.Lookup(task.User)
+		if err != nil {
+			return err
+		}
+
+		if attr.Credential == nil {
+			attr.Credential = &syscall.Credential{}
+		}
+
+		uitInt, _ := strconv.ParseUint(taskUser.Uid, 32, 10)
+		attr.Credential.Uid = uint32(uitInt)
+		attr.Credential.NoSetGroups = true
+	}
+
+	// set group
+	if task.Group != "" {
+		taskGroup, err := user.LookupGroup(task.Group)
+		if err != nil {
+			return err
+		}
+
+		if attr.Credential == nil {
+			attr.Credential = &syscall.Credential{}
+		}
+
+		groupInt, _ := strconv.ParseUint(taskGroup.Gid, 32, 10)
+		attr.Credential.Gid = uint32(groupInt)
+		attr.Credential.NoSetGroups = true
+	}
+
+	// set files flow
+	files := make([]*os.File, 3)
+	files[0] = task.TaskFlows.StdIn
+	files[1] = task.TaskFlows.StdOut
+	files[2] = task.TaskFlows.StdErr
+
+	// start task
+	procAttrs := os.ProcAttr{Dir: workspace, Env: env, Files: files, Sys: &attr}
+
+	cmd, args := task.ParseCmd()
+	cmdArgs := append([]string{cmd}, args...)
+	process, err := os.StartProcess(cmd, cmdArgs, &procAttrs)
+	if err != nil {
+		return fmt.Errorf("can't create process %s: %v ||||%s", os.Args[0], os.Args, err)
+	}
+
+	task.Pid = process.Pid
+	return
 }
 
-func (t *TaskRuntime) TaskWatchFunc() {
+func (t *TaskRuntime) Stop() (err error) {
+	process, err := os.FindProcess(t.Pid)
+	if err != nil {
+		return err
+	}
 
-}
+	err = process.Kill()
+	if err == nil {
+		t.Pid = -1
+	}
 
-func (t *TaskRuntime) Stop() {
-	t.TaskStdLogSignal <- true
-	t.TaskErrorLogSignal <- true
-	t.TaskStateSignal <- true
+	return err
 }
 
 func (t *TaskRuntime) Run() {

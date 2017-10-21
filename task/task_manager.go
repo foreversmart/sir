@@ -3,12 +3,9 @@ package task
 import (
 	"fmt"
 	"os"
-	"os/user"
 	"path"
 	"sir/models"
-	"strconv"
 	"sync"
-	"syscall"
 )
 
 type TaskManager struct {
@@ -32,17 +29,8 @@ func NewTaskManager(workspace string) *TaskManager {
 
 func (t *TaskManager) StopTask(name string) (err error) {
 	if task, ok := t.Tasks[name]; ok {
-		process, err := os.FindProcess(task.Pid)
-		if err != nil {
-			return err
-		}
+		return task.Stop()
 
-		err = process.Kill()
-		if err == nil {
-			task.Pid = -1
-		}
-
-		return err
 	}
 
 	return fmt.Errorf("%s %s", name, " task not found or already stopped")
@@ -56,21 +44,6 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 	if task.TaskState == nil {
 		task.TaskState = &models.TaskState{}
 	}
-
-	// set work space
-	var (
-		workspace string
-	)
-
-	dir, _ := os.Getwd()
-	workspace = dir
-	if task.Workspace != "" {
-		workspace = task.Workspace
-	}
-
-	// set env
-	env := os.Environ()
-	env = append(env, task.Env...)
 
 	// set process flow
 	flows, err := t.GenerateTaskFlow(task.Name)
@@ -87,59 +60,15 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 		StdErrPath: flows[2].FilePath,
 	}
 
-	// set uid
-	attr := syscall.SysProcAttr{}
-	if task.User != "" {
-		taskUser, err := user.Lookup(task.User)
-		if err != nil {
-			return err
-		}
-
-		if attr.Credential == nil {
-			attr.Credential = &syscall.Credential{}
-		}
-
-		uitInt, _ := strconv.ParseUint(taskUser.Uid, 32, 10)
-		attr.Credential.Uid = uint32(uitInt)
-		attr.Credential.NoSetGroups = true
-	}
-
-	// set group
-	if task.Group != "" {
-		taskGroup, err := user.LookupGroup(task.Group)
-		if err != nil {
-			return err
-		}
-
-		if attr.Credential == nil {
-			attr.Credential = &syscall.Credential{}
-		}
-
-		groupInt, _ := strconv.ParseUint(taskGroup.Gid, 32, 10)
-		attr.Credential.Gid = uint32(groupInt)
-		attr.Credential.NoSetGroups = true
-	}
-
-	files := make([]*os.File, 0)
-
-	for _, file := range flows {
-		files = append(files, file.File)
-	}
-
-	// start task
-	procAttrs := os.ProcAttr{Dir: workspace, Env: env, Files: files, Sys: &attr}
-
-	cmd, args := task.ParseCmd()
-	cmdArgs := append([]string{cmd}, args...)
-	process, err := os.StartProcess(cmd, cmdArgs, &procAttrs)
-	if err != nil {
-		return fmt.Errorf("can't create process %s: %v ||||%s", os.Args[0], os.Args, err)
-	}
-
-	task.Pid = process.Pid
-
 	// exec task self func
 	taskRuntime := NewTaskRuntime(task)
+
+	// start task
+	err = taskRuntime.Start()
+	if err != nil {
+		return err
+	}
+
 	taskRuntime.Run()
 
 	// add task
