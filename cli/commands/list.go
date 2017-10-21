@@ -1,8 +1,12 @@
 package commands
 
 import (
-	"sir/cli/mock"
+	"fmt"
+	"net/http"
+	"sir/cli/config"
 	"sir/cli/utils"
+	"sir/lib/httpclient"
+	"sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -16,8 +20,18 @@ var CmdList = cli.Command{
 }
 
 func ActionList(c *cli.Context) error {
-	// TODO call sir daemon
-	list := mock.GetTaskList()
+
+	var response map[string][]models.Task
+	httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task"), nil, &response)
+
+	// TODO handle error
+
+	list := response["data"]
+
+	// list := mock.GetTaskList()
+
+	println()
+	fmt.Println(utils.Style.Success("[INFO]"), "TASK LIST\n")
 
 	utils.RenderTaskList(list, c)
 
