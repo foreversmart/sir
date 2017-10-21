@@ -14,13 +14,13 @@ import (
 )
 
 func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
-	fmt.Println(Style.Header(" # TASK CONFIG INFO:"))
+	fmt.Println(Style.Header(" # TASK CONFIG INFO "))
 
 	table := tablewriter.NewWriter(c.App.Writer)
 
 	table.SetRowLine(false)
 
-	table.Append([]string{Style.Title("NAME"), Style.Bold(taskConfig.Name)})
+	table.Append([]string{Style.Title("NAME"), Style.Title(taskConfig.Name)})
 	table.Append([]string{Style.Title("EXEC"), taskConfig.Cmd})
 	table.Append([]string{Style.Title("WATCH"), Format.Enabled(taskConfig.Watch)})
 	table.Append([]string{Style.Title("WATCH_DIR"), taskConfig.WatchDir})
@@ -80,7 +80,6 @@ func (s TaskSlice) Less(i, j int) bool {
 }
 
 func RenderTaskList(list []models.Task, c *cli.Context) {
-	println(len(list), "?")
 
 	sort.Sort(TaskSlice(list))
 
@@ -130,6 +129,41 @@ func RenderTaskList(list []models.Task, c *cli.Context) {
 	table.Render() // Send output
 }
 
+func RenderTaskState(task *models.TaskState, c *cli.Context) {
+	fmt.Println(Style.Header(" # TASK PROCESS INFO "))
+
+	table := tablewriter.NewWriter(c.App.Writer)
+
+	table.SetRowLine(false)
+
+	table.Append([]string{Style.Title("PID"), Style.Title(strconv.Itoa(int(task.Pid)))})
+	table.Append([]string{Style.Title("CPU"), humanize.FormatFloat("###.##", task.CpuPercent) + " %"})
+	table.Append([]string{Style.Title("MEMORY"), humanize.Bytes(task.Mem)})
+	table.Append([]string{Style.Title("LOAD"), humanize.FormatFloat("###.##", task.Load)})
+	table.Append([]string{Style.Title("STAT"), task.Stat})
+
+	table.Append([]string{Style.Title("DISK_IO"), "R    " + humanize.Bytes(task.IoCounter.ReadBytes)})
+	table.Append([]string{"", "W    " + humanize.Bytes(task.IoCounter.WriteBytes)})
+
+	table.Append([]string{Style.Title("NETWORK_IO"), "SENT " + humanize.Bytes(task.Net.BytesSent)})
+	table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
+
+	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime, 0))) / 1e9) * 1e9
+	table.Append([]string{Style.Title("UP_TIME"), time.Duration(seconds).String()})
+
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.Render()
+
+}
+
 func RenderTask(task *models.Task, c *cli.Context) {
-	println(task.Name)
+	if task.TaskState != nil {
+		fmt.Println(Style.Success("[INFO]"), Style.Title(task.Name), "TASK PROCESS IS", Style.Success("RUNNING"), "\n")
+		RenderTaskState(task.TaskState, c)
+		println()
+	} else {
+		fmt.Println(Style.Success("[INFO]"), Style.Title(task.Name), "TASK PROCESS IS", Style.Fail("STOPED"), "\n")
+	}
+
+	RenderTaskConfig(task.TaskConfig, c)
 }

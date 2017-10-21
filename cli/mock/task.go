@@ -63,7 +63,7 @@ func GetTaskState() models.TaskState {
 			PacketsRecv: 11,
 		},
 		Load:   1.2,
-		Stat:   "what?",
+		Stat:   "S+",
 		UpTime: 1508577481,
 	}
 }
