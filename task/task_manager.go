@@ -47,6 +47,13 @@ func (t *TaskManager) Start(task *models.Task) (err error) {
 		return err
 	}
 
+	// task flow
+	task.TaskFlows = &models.TaskFlows{
+		StdIn:  flows[0],
+		StdOut: flows[1],
+		StdErr: flows[2],
+	}
+
 	// set uid
 	attr := syscall.SysProcAttr{}
 	if task.User != "" {
@@ -104,12 +111,10 @@ func (t *TaskManager) AddTask(task *models.Task) {
 
 func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
 	flows = make([]*os.File, 3)
-	//flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	//if err != nil {
-	//	return flows, err
-	//}
-
-	flows[0] = os.Stdin
+	flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return flows, err
+	}
 
 	flows[1], err = os.OpenFile(path.Join(t.Workspace, name+".temp.stdout"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
