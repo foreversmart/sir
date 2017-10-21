@@ -9,7 +9,7 @@ import (
 // 获取可执行文件的绝对路径
 func ExecFileAbsPath(path string) (abspath string, err error) {
 	abspath, err = exec.LookPath(path)
-	if err == nil {
+	if err == nil && abspath[0] != '.' {
 		return
 	}
 
@@ -18,7 +18,7 @@ func ExecFileAbsPath(path string) (abspath string, err error) {
 		return
 	}
 
-	_, err = os.Stat(path)
+	_, err = os.Stat(abspath)
 	if err != nil {
 		return
 	}
