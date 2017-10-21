@@ -14,7 +14,6 @@ func (task *TaskController) Start() {
 		beego.Error("should have task name ")
 		return
 	}
-	beego.Info("start", taskname)
 
 	conf, err := config.GetTaskConfig(taskname)
 	if err != nil {
@@ -26,7 +25,7 @@ func (task *TaskController) Start() {
 		TaskConfig: conf,
 	})
 	if err != nil {
-		beego.Error(err)
+		beego.Error("TaskManager.StartTask", err)
 	}
 }
 
@@ -38,9 +37,9 @@ func (task *TaskController) Restart() {
 		return
 	}
 
-	err := TaskManager.StopTask(taskname)
+	err := TaskManager.RemoveTask(taskname)
 	if err != nil {
-		beego.Error("TaskManager.StopTask", err)
+		beego.Error("TaskManager.RemoveTask", err)
 	}
 
 	conf, err := config.GetTaskConfig(taskname)
@@ -65,9 +64,9 @@ func (task *TaskController) Stop() {
 		return
 	}
 
-	err := TaskManager.StopTask(taskname)
+	err := TaskManager.RemoveTask(taskname)
 	if err != nil {
-		beego.Error(err)
+		beego.Error("TaskManager.RemoveTask", err)
 	}
 }
 
