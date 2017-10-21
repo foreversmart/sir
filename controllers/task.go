@@ -7,7 +7,14 @@ import (
 	"sir/models"
 
 	"github.com/astaxie/beego"
+	"sir/task"
 )
+
+var TaskManager *task.TaskManager
+
+func init() {
+	TaskManager = task.NewTaskManager(config.AppHome + beego.AppConfig.String("workspace"))
+}
 
 type TaskController struct {
 	beego.Controller
