@@ -36,10 +36,12 @@ func CreateTaskConfig(params *models.TaskConfig) (err error) {
 		params.LogConfigs.RotateType = "day"
 	}
 
-	user, _ := user.Current()
-	println("hello", user.Name, user.Username)
 	if params.User == "" {
-		params.User = user.Name
+		user, _ := user.Current()
+		params.User = user.Username
+	}
+	if params.Group == "" {
+		params.Group = params.User
 	}
 
 	err = os.MkdirAll(taskConfigPath, 0700)

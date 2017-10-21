@@ -42,6 +42,10 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 		table.Append([]string{key, env})
 	}
 
+	if len(taskConfig.Env) == 0 {
+		table.Append([]string{Style.Title("ENV"), ""})
+	}
+
 	// RULES
 	for i, rule := range taskConfig.Rules {
 		key := " "
@@ -49,6 +53,9 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 			key = Style.Title("RULES")
 		}
 		table.Append([]string{key, Format.KV(rule.Type, strconv.FormatFloat(rule.Threshold, 'f', 2, 64))})
+	}
+	if len(taskConfig.Rules) == 0 {
+		table.Append([]string{Style.Title("RULES"), ""})
 	}
 
 	table.Append([]string{Style.Title("ERR_LOG"), taskConfig.LogConfigs.ErrLogPath})
