@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"sir/cli/commands"
 
-	"github.com/ttacon/chalk"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -30,7 +28,7 @@ func initApp() *cli.App {
 	}
 
 	app.Before = func(c *cli.Context) error {
-		fmt.Println(chalk.Magenta.Color("Good to go~"))
+		// fmt.Println(chalk.Magenta.Color("Good to go~"))
 		return nil
 	}
 
