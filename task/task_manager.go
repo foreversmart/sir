@@ -13,7 +13,7 @@ import (
 
 type TaskManager struct {
 	mutex sync.Mutex
-	Tasks map[string]*models.Task
+	Tasks map[string]*TaskRuntime
 
 	Workspace string
 }
@@ -23,11 +23,6 @@ func NewTaskManager(workspace string) *TaskManager {
 		Tasks:     make(map[string]*models.Task),
 		Workspace: workspace,
 	}
-}
-
-// check task status
-func (t *TaskManager) run() {
-
 }
 
 func (t *TaskManager) StopTask(name string) (err error) {
@@ -49,6 +44,10 @@ func (t *TaskManager) StopTask(name string) (err error) {
 }
 
 func (t *TaskManager) StartTask(task *models.Task) (err error) {
+	if t.IsTaskExist(task.Name) {
+		return
+	}
+
 	// set work space
 	var (
 		workspace string
@@ -120,17 +119,42 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 
 	task.Pid = process.Pid
 
+	// exec task self func
+	taskRuntime := NewTaskRuntime(task)
+	taskRuntime.Run()
+
 	// add task
-	t.AddTask(task)
+	t.AddTask(taskRuntime)
 	return nil
 }
 
-func (t *TaskManager) AddTask(task *models.Task) {
+func (t *TaskManager) IsTaskExist(name string) (ok bool) {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+
+	_, ok = t.Tasks[name]
+	return
+}
+
+func (t *TaskManager) AddTask(task *TaskRuntime) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 
 	t.Tasks[task.Name] = task
 
+}
+
+func (t *TaskManager) RemoveTask(task *TaskRuntime) (err error) {
+	err = t.StopTask(task.Name)
+	if err != nil {
+		return
+	}
+
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+
+	delete(t.Tasks, task.Name)
+	return
 }
 
 func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
