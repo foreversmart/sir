@@ -2,6 +2,8 @@ package task
 
 import (
 	"fmt"
+	"github.com/shirou/gopsutil/process"
+	"log"
 	"os"
 	"path"
 	"sir/models"
@@ -70,6 +72,19 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 	}
 
 	taskRuntime.Run()
+
+	pro, err := process.NewProcess(int32(taskRuntime.Pid))
+	if err != nil {
+		log.Printf("process.NewProcess(%d): %v", taskRuntime.Pid, err)
+		return
+	}
+
+	username, err := pro.Username()
+	if err != nil {
+		log.Printf("process.Username(%d): %v", taskRuntime.Pid, err)
+	} else {
+		taskRuntime.User = username
+	}
 
 	// add task
 	t.AddTask(taskRuntime)
