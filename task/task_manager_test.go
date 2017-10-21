@@ -6,19 +6,39 @@ import (
 	"testing"
 )
 
-func TestTaskManager_Start(t *testing.T) {
+func TestTaskManager_StartTask(t *testing.T) {
 	assertion := assert.New(t)
 
 	manager := NewTaskManager("/Users/hong/projects/src/sir/")
 
 	task := &models.Task{
-		&models.TaskState{},
-		&models.TaskConfig{
+		TaskState: &models.TaskState{},
+		TaskConfig: &models.TaskConfig{
 			Name: "test",
 			Cmd:  "/sbin/ping 114.114.114.114",
 		},
 	}
-	err := manager.Start(task)
+	err := manager.StartTask(task)
 	assertion.Nil(err)
 	assertion.Equal(1, len(manager.Tasks))
+}
+
+func TestTaskManager_StopTask(t *testing.T) {
+	assertion := assert.New(t)
+
+	manager := NewTaskManager("/Users/hong/projects/src/sir/")
+
+	task := &models.Task{
+		TaskState: &models.TaskState{},
+		TaskConfig: &models.TaskConfig{
+			Name: "test",
+			Cmd:  "/sbin/ping 114.114.114.114",
+		},
+	}
+	err := manager.StartTask(task)
+	assertion.Nil(err)
+
+	err = manager.StopTask(task.Name)
+	assertion.Nil(err)
+
 }
