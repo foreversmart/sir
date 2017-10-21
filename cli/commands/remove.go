@@ -13,5 +13,6 @@ var CmdRemove = cli.Command{
 }
 
 func ActionRemove(c *cli.Context) error {
+	// TODO
 	return nil
 }
