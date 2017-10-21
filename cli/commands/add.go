@@ -117,6 +117,8 @@ func ActionAdd(c *cli.Context) error {
 
 	taskConfig := response["data"]
 
+	println()
+	fmt.Println(utils.Style.Success("[INFO]"), "ADD NEW TASK", utils.Style.Success("SUCCESS"), "\n")
 	// 输出结果
 	utils.RenderTaskConfig(&taskConfig, c)
 

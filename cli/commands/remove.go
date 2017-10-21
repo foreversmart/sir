@@ -1,6 +1,12 @@
 package commands
 
 import (
+	"fmt"
+	"net/http"
+	"sir/cli/config"
+	"sir/cli/utils"
+	"sir/lib/httpclient"
+
 	cli "gopkg.in/urfave/cli.v1"
 )
 
@@ -13,6 +19,14 @@ var CmdRemove = cli.Command{
 }
 
 func ActionRemove(c *cli.Context) error {
-	// TODO
+	taskName := c.Args().First()
+	// 调用api
+	var response map[string]interface{}
+	httpclient.Client.DoJSON(http.MethodDelete, config.ApiPath("/task/"+taskName), nil, &response)
+	// TODO handle error
+
+	println()
+	fmt.Println(utils.Style.Success("[INFO]"), "REMOVE TASK", utils.Style.Title(taskName), utils.Style.Success("SUCCESS"), "\n")
+
 	return nil
 }

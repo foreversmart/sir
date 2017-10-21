@@ -31,7 +31,7 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 	table.Append([]string{Style.Title("AUTO_START"), Format.Enabled(taskConfig.AutoStart)})
 	table.Append([]string{Style.Title("AUTO_RESTART"), Format.Enabled(taskConfig.AutoRestart)})
 	table.Append([]string{Style.Title("RESTART_INTERVAL"), strconv.Itoa(taskConfig.RestartInterval)})
-	table.Append([]string{Style.Title("RESTART_COUNT"), string(taskConfig.RestartCount)})
+	table.Append([]string{Style.Title("RESTART_COUNT"), strconv.Itoa(taskConfig.RestartCount)})
 
 	// ENV
 	for i, env := range taskConfig.Env {
