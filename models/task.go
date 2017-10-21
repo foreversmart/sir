@@ -3,10 +3,11 @@ package models
 import (
 	"time"
 
-	"github.com/shirou/gopsutil/net"
-	"github.com/shirou/gopsutil/process"
 	"os"
 	"strings"
+
+	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
 )
 
 type Task struct {
@@ -31,6 +32,9 @@ type TaskFlows struct {
 	StdIn  *os.File
 	StdOut *os.File
 	StdErr *os.File
+
+	StdOutPath string
+	StdErrPath string
 }
 
 type TaskState struct {

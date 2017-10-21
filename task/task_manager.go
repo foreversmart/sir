@@ -18,6 +18,11 @@ type TaskManager struct {
 	Workspace string
 }
 
+type TaskFlow struct {
+	File     *os.File
+	FilePath string
+}
+
 func NewTaskManager(workspace string) *TaskManager {
 	return &TaskManager{
 		Tasks:     make(map[string]*TaskRuntime),
@@ -71,9 +76,11 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 
 	// task flow
 	task.TaskFlows = &models.TaskFlows{
-		StdIn:  flows[0],
-		StdOut: flows[1],
-		StdErr: flows[2],
+		StdIn:      flows[0],
+		StdOut:     flows[1].File,
+		StdOutPath: flows[1].FilePath,
+		StdErr:     flows[2].File,
+		StdErrPath: flows[2].FilePath,
 	}
 
 	// set uid
@@ -157,19 +164,29 @@ func (t *TaskManager) RemoveTask(task *TaskRuntime) (err error) {
 	return
 }
 
-func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
-	flows = make([]*os.File, 3)
-	flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+func (t *TaskManager) GenerateTaskFlow(name string) (flows []*TaskFlow, err error) {
+	flows = make([]*TaskFlow, 3)
+
+	flowPath := path.Join(t.Workspace, name+".temp.in")
+
+	flows[0].FilePath = flowPath
+	flows[0].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return flows, err
 	}
 
-	flows[1], err = os.OpenFile(path.Join(t.Workspace, name+".temp.stdout"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	flowPath = path.Join(t.Workspace, name+".temp.stdout")
+
+	flows[1].FilePath = flowPath
+	flows[1].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return flows, err
 	}
 
-	flows[2], err = os.OpenFile(path.Join(t.Workspace, name+".temp.stderr"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	flowPath = path.Join(t.Workspace, name+".temp.stderr")
+
+	flows[2].FilePath = flowPath
+	flows[2].File, err = os.OpenFile(flowPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return flows, err
 	}
