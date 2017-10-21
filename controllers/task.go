@@ -30,6 +30,8 @@ func (task *TaskController) Remove() {
 	config.DeleteTaskConfig(taskname)
 	// TODO handle error
 
+	// TODO update mem
+
 	task.ServeJSON()
 }
 
