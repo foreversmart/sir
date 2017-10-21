@@ -27,20 +27,20 @@ type TaskState struct {
 }
 
 type TaskConfig struct {
-	Name            string            `json:"name"`
-	Cmd             string            `json:"cmd"`
-	Watch           bool              `json:"watch"`
-	WatchDir        string            `json:"watch_dir"`
-	Env             map[string]string `json:"env"`
-	Workspace       string            `json:"workspace"`
-	User            string            `json:"user"`
-	Group           string            `json:"group"`
-	Priority        int               `json:"priority"` // higher is lower
-	AutoRestart     bool              `json:"autorestart"`
-	AutoStart       bool              `json:"auto_start"`
-	RestartInterval int               `json:"restart_interval"` // seconds
-	Rules           []*RuleConfig     `json:"rules"`
-	LogConfigs      *LogConfig        `json:"log_configs"`
+	Name            string        `json:"name"`
+	Cmd             string        `json:"cmd"`
+	Watch           bool          `json:"watch"`
+	WatchDir        string        `json:"watch_dir"`
+	Env             []string      `json:"env"` // key=value
+	Workspace       string        `json:"workspace"`
+	User            string        `json:"user"`
+	Group           string        `json:"group"`
+	Priority        int           `json:"priority"` // higher is lower
+	AutoRestart     bool          `json:"autorestart"`
+	AutoStart       bool          `json:"auto_start"`
+	RestartInterval int           `json:"restart_interval"` // seconds
+	Rules           []*RuleConfig `json:"rules"`
+	LogConfigs      *LogConfig    `json:"log_configs"`
 
 	//
 	CTime        time.Time `json:"c_time"`
