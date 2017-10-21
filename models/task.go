@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
+)
 
 type Task struct {
 	*TaskState
@@ -9,15 +14,16 @@ type Task struct {
 }
 
 type TaskState struct {
-	Pid        int     `json:"pid"`
-	Cpu        float64 `json:"cpu"`
-	Mem        int     `json:"mem"`
-	Disk       int     `json:"disk"`
-	Net        int     `json:"net"`
-	MemPercent float64 `json:"mem"`
-	Load       float64 `json:"load"`
-	Status     string  `json:"status"`
-	UpTime     int     `json:"up_time"` // status
+	Pid        int32                   `json:"pid"`
+	CpuPercent float64                 `json:"cpu"`
+	Mem        uint64                  `json:"mem"` // Kb
+	MemPercent float32                 `json:"mem"`
+	Disk       int                     `json:"disk"`
+	IoCounter  *process.IOCountersStat `json:"io_counter"`
+	Net        *net.IOCountersStat     `json:"net"`
+	Load       float64                 `json:"load"`
+	Stat       string                  `json:"stat"`
+	UpTime     int64                   `json:"up_time"` // timestamp(msec)
 }
 
 type TaskConfig struct {
