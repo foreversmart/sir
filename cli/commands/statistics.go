@@ -6,7 +6,7 @@ import (
 
 var CmdStatistics = cli.Command{
 	Name:      "statistics",
-	UsageText: "[<task>]",
+	UsageText: "[<task>] [-from <fromtime>] [-to <endtime>]",
 	Category:  string(ServiceCategory),
 	Usage:     "show statistics, default sir daemon statistics",
 	Action:    ActionStatistics,

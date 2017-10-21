@@ -163,6 +163,7 @@ func RenderTaskState(task *models.TaskState, c *cli.Context) {
 }
 
 func RenderTask(task *models.Task, c *cli.Context) {
+	println()
 	if task.TaskState != nil {
 		fmt.Println(Style.Success("[INFO]"), Style.Title(task.Name), "TASK PROCESS IS", Style.Success("RUNNING"), "\n")
 		RenderTaskState(task.TaskState, c)

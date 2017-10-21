@@ -17,14 +17,6 @@ func init() {
 
 	beego.GlobalControllerRouter["sir/controllers:TaskController"] = append(beego.GlobalControllerRouter["sir/controllers:TaskController"],
 		beego.ControllerComments{
-			Method: "Show",
-			Router: `/task/:name`,
-			AllowHTTPMethods: []string{"get"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["sir/controllers:TaskController"] = append(beego.GlobalControllerRouter["sir/controllers:TaskController"],
-		beego.ControllerComments{
 			Method: "Remove",
 			Router: `/task/:name`,
 			AllowHTTPMethods: []string{"delete"},
@@ -36,6 +28,14 @@ func init() {
 			Method: "Update",
 			Router: `/task/:name`,
 			AllowHTTPMethods: []string{"put"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["sir/controllers:TaskController"] = append(beego.GlobalControllerRouter["sir/controllers:TaskController"],
+		beego.ControllerComments{
+			Method: "Show",
+			Router: `/task/:name`,
+			AllowHTTPMethods: []string{"get"},
 			MethodParams: param.Make(),
 			Params: nil})
 
