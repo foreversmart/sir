@@ -17,7 +17,7 @@ import (
 var (
 	AppHome        = UserHomeDir() + "/.sir"
 	taskConfigPath = UserHomeDir() + "/.sir/configs"
-	defaultLogPath = UserHomeDir() + "/.sir/logs"
+	DefaultLogPath = UserHomeDir() + "/.sir/logs"
 )
 
 func CreateTaskConfig(params *models.TaskConfig) (err error) {

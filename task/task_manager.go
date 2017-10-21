@@ -20,7 +20,7 @@ type TaskManager struct {
 
 func NewTaskManager(workspace string) *TaskManager {
 	return &TaskManager{
-		Tasks:     make(map[string]*models.Task),
+		Tasks:     make(map[string]*TaskRuntime),
 		Workspace: workspace,
 	}
 }
