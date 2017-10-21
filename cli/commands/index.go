@@ -24,7 +24,7 @@ var CliCmds = []cli.Command{
 	CmdRestart,
 	CmdList,
 	CmdShow,
-	CmdSend,
+	CmdAttach,
 	CmdLog,
 
 	// service cmds
