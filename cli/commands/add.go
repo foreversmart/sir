@@ -19,7 +19,63 @@ var CmdAdd = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "assign name for new task config",
+			Usage: "must have, assign name for new task config",
+		},
+		cli.StringFlag{
+			Name:  "watch",
+			Usage: "enable watch & reload function, value is the watch folder path, default is false",
+		},
+		cli.StringFlag{
+			Name:  "env",
+			Usage: "run time env., format: \"key=value&key=value\"",
+		},
+		cli.StringFlag{
+			Name:  "workspace",
+			Usage: "enable workspace mode, value is workspace folder path, default is false",
+		},
+		cli.StringFlag{
+			Name:  "user",
+			Usage: "run as which user, default is current user",
+		},
+		cli.StringFlag{
+			Name:  "group",
+			Usage: "run as which group, default is current group",
+		},
+		cli.IntFlag{
+			Name:  "priority",
+			Usage: "task priority, decide the auto start seq., default is 0",
+		},
+		cli.BoolFlag{
+			Name:  "autostart",
+			Usage: "enable auto start when daemon start, default is false",
+		},
+		cli.BoolFlag{
+			Name:  "autorestart",
+			Usage: "enable auto restart when crash, default is false",
+		},
+		cli.IntFlag{
+			Name:  "restartinterval",
+			Usage: "enable auto restart when crash, default is 0s",
+		},
+		cli.StringFlag{
+			Name:  "errlog",
+			Usage: "assign err log folder path, default is ~/.sir/logs/",
+		},
+		cli.StringFlag{
+			Name:  "stdlog",
+			Usage: "assign std log folder path, default is ~/.sir/logs/",
+		},
+		cli.StringFlag{
+			Name:  "logrotate",
+			Usage: "log file rotate type: day|size, default is day",
+		},
+		cli.Float64Flag{
+			Name:  "loglimit",
+			Usage: "log file rotate limit, unit is DAY or MB",
+		},
+		cli.StringFlag{
+			Name:  "rules",
+			Usage: "set auto restart rules, format is <TYPE>=<THRESHOLD>&<TYPE>=<THRESHOLD>, types: cpu|mem|load|uptime, threshold units:percentage|MB|.|seconds",
 		},
 	},
 }
@@ -29,7 +85,7 @@ func ActionAdd(c *cli.Context) error {
 	// 获取参数
 	opts := opts.ParseAddOpts(c)
 	if !opts.IsValid() {
-		fmt.Printf("ERROR: Missing params 'sir add <cmd> --name <taskname>'\n")
+		fmt.Printf("ERROR: params format error, please check \"sir add -h\"\n")
 		os.Exit(0)
 	}
 
