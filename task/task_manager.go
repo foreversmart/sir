@@ -13,19 +13,42 @@ import (
 
 type TaskManager struct {
 	mutex sync.Mutex
-	Tasks []*models.Task
+	Tasks map[string]*models.Task
 
 	Workspace string
 }
 
 func NewTaskManager(workspace string) *TaskManager {
 	return &TaskManager{
-		Tasks:     make([]*models.Task, 0, 5),
+		Tasks:     make(map[string]*models.Task),
 		Workspace: workspace,
 	}
 }
 
-func (t *TaskManager) Start(task *models.Task) (err error) {
+// check task status
+func (t *TaskManager) run() {
+
+}
+
+func (t *TaskManager) StopTask(name string) (err error) {
+	if task, ok := t.Tasks[name]; ok {
+		process, err := os.FindProcess(task.Pid)
+		if err != nil {
+			return err
+		}
+
+		err = process.Kill()
+		if err == nil {
+			task.Pid = -1
+		}
+
+		return err
+	}
+
+	return fmt.Errorf("%s %s", name, " task not found or already stopped")
+}
+
+func (t *TaskManager) StartTask(task *models.Task) (err error) {
 	// set work space
 	var (
 		workspace string
@@ -106,7 +129,8 @@ func (t *TaskManager) AddTask(task *models.Task) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 
-	t.Tasks = append(t.Tasks, task)
+	t.Tasks[task.Name] = task
+
 }
 
 func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
