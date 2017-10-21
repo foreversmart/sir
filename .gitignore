@@ -17,3 +17,5 @@ routers/commentsRouter___________________________*
 *.tmp
 
 *.log
+
+test.temp.*
