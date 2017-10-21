@@ -76,7 +76,7 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 
 	// task flow
 	task.TaskFlows = &models.TaskFlows{
-		StdIn:      flows[0],
+		StdIn:      flows[0].File,
 		StdOut:     flows[1].File,
 		StdOutPath: flows[1].FilePath,
 		StdErr:     flows[2].File,
@@ -114,8 +114,14 @@ func (t *TaskManager) StartTask(task *models.Task) (err error) {
 		attr.Credential.Gid = uint32(groupInt)
 	}
 
+	files := make([]*os.File, 0)
+
+	for _, file := range flows {
+		files = append(files, file.File)
+	}
+
 	// start task
-	procAttrs := os.ProcAttr{Dir: workspace, Env: env, Files: flows, Sys: &attr}
+	procAttrs := os.ProcAttr{Dir: workspace, Env: env, Files: files, Sys: &attr}
 
 	cmd, args := task.ParseCmd()
 	cmdArgs := append([]string{cmd}, args...)
