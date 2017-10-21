@@ -147,6 +147,10 @@ func (t *TaskRuntime) TaskStateFunc() {
 	}
 }
 
+func (t *TaskRuntime) TaskWatchFunc() {
+
+}
+
 func (t *TaskRuntime) Stop() {
 	t.TaskStdLogSignal <- true
 	t.TaskErrorLogSignal <- true
@@ -157,4 +161,8 @@ func (t *TaskRuntime) Run() {
 	go t.TaskLog()
 
 	go t.TaskStateFunc()
+
+	if t.Watch && t.WatchDir != "" {
+		go t.TaskWatchFunc()
+	}
 }
