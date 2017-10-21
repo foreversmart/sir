@@ -5,11 +5,14 @@ import (
 
 	"github.com/shirou/gopsutil/net"
 	"github.com/shirou/gopsutil/process"
+	"os"
 	"strings"
 )
 
 type Task struct {
 	*TaskState
+
+	*TaskFlows
 
 	*TaskConfig
 }
@@ -22,6 +25,12 @@ func (t *Task) ParseCmd() (cmd string, args []string) {
 	}
 
 	return
+}
+
+type TaskFlows struct {
+	StdIn  *os.File
+	StdOut *os.File
+	StdErr *os.File
 }
 
 type TaskState struct {
