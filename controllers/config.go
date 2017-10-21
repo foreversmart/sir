@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"sir/lib/errors"
 	"sir/models"
+	"time"
 
 	"log"
 
@@ -20,7 +24,15 @@ func CreateConfig(params *models.TaskConfig) (err error) {
 		return errors.InvalidTaskConfig
 	}
 
-	file, err := os.OpenFile(taskConfigPath+"/"+params.Name+".toml", os.O_RDWR|os.O_CREATE, 0666)
+	// init the config name
+	t := time.Now()
+	h := md5.New()
+	io.WriteString(h, params.Name)
+	io.WriteString(h, t.String())
+
+	configName := fmt.Sprintf("%x", h.Sum(nil))
+
+	file, err := os.OpenFile(taskConfigPath+"/"+configName+".toml", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		log.Printf("os.OpenFile(%s, os.O_RDWR, 0666): %v", taskConfigPath)
 
