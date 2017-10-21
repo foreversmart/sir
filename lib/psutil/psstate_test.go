@@ -1,4 +1,4 @@
-package controllers
+package psutil
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 )
 
 func Test_Taskstate(t *testing.T) {
-	taskstate, err := GetTaskState(int32(1))
+	taskstate, err := TaskState(int32(1))
 	if err != nil {
 		fmt.Println("err=", err)
 		return

@@ -1,4 +1,4 @@
-package controllers
+package psutil
 
 import (
 	"sir/models"
@@ -8,13 +8,13 @@ import (
 	"github.com/shirou/gopsutil/process"
 )
 
-func GetTaskState(pid int32) (taskState *models.TaskState, err error) {
+func TaskState(pid int) (taskState *models.TaskState, err error) {
 	taskState = &models.TaskState{}
 
 	// inject the pid
-	taskState.Pid = int(pid)
+	taskState.Pid = pid
 
-	pro, err := process.NewProcess(pid)
+	pro, err := process.NewProcess(int32(pid))
 	if err != nil {
 		log.Printf("process.NewProcess(%d): %v", pid, err)
 		return
@@ -46,13 +46,15 @@ func GetTaskState(pid int32) (taskState *models.TaskState, err error) {
 	// inject the mem percent
 	taskState.MemPercent = memPercent
 
-	net, err := pro.NetIOCounters(false)
-	if err != nil {
-		log.Printf("pro.NetIOCounters(false): %v", err)
-		return
+	net, errS := pro.NetIOCounters(false)
+	if errS != nil {
+		log.Printf("pro.NetIOCounters(false): %v", errS)
+		// ignore it on mac
 	}
 	// inject the net BytesSent and BytesRecv
-	taskState.Net = &net[0]
+	if len(net) > 0 {
+		taskState.Net = &net[0]
+	}
 
 	io, err := pro.IOCounters()
 	if err != nil {
