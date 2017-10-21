@@ -6,9 +6,9 @@ var Format _Format
 
 func (_ *_Format) Enabled(enabled bool) string {
 	if enabled {
-		return "启用"
+		return Style.Success("enabled")
 	}
-	return "禁用"
+	return Style.Disabled("disabled")
 }
 
 func (_ *_Format) KVMap(env map[string]string) []string {
