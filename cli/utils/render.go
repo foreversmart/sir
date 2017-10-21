@@ -148,11 +148,15 @@ func RenderTaskState(task *models.TaskState, c *cli.Context) {
 	table.Append([]string{Style.Title("LOAD"), humanize.FormatFloat("###.##", task.Load)})
 	table.Append([]string{Style.Title("STAT"), task.Stat})
 
-	table.Append([]string{Style.Title("DISK_IO"), "R    " + humanize.Bytes(task.IoCounter.ReadBytes)})
-	table.Append([]string{"", "W    " + humanize.Bytes(task.IoCounter.WriteBytes)})
+	if task.IoCounter != nil {
+		table.Append([]string{Style.Title("DISK_IO"), "R    " + humanize.Bytes(task.IoCounter.ReadBytes)})
+		table.Append([]string{"", "W    " + humanize.Bytes(task.IoCounter.WriteBytes)})
+	}
 
-	table.Append([]string{Style.Title("NETWORK_IO"), "SENT " + humanize.Bytes(task.Net.BytesSent)})
-	table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
+	if task.Net != nil {
+		table.Append([]string{Style.Title("NETWORK_IO"), "SENT " + humanize.Bytes(task.Net.BytesSent)})
+		table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
+	}
 
 	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime, 0))) / 1e9) * 1e9
 	table.Append([]string{Style.Title("UP_TIME"), time.Duration(seconds).String()})

@@ -41,7 +41,7 @@ type TaskState struct {
 	Pid        int                     `json:"pid"`
 	CpuPercent float64                 `json:"cpu"`
 	Mem        uint64                  `json:"mem"` // Kb
-	MemPercent float32                 `json:"mem"`
+	MemPercent float32                 `json:"mem_percent"`
 	Disk       int                     `json:"disk"`
 	IoCounter  *process.IOCountersStat `json:"io_counter"`
 	Net        *net.IOCountersStat     `json:"net"`
