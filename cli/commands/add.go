@@ -102,7 +102,7 @@ func ActionAdd(c *cli.Context) error {
 
 	// 调用api
 	var response map[string]models.TaskConfig
-	httpclient.Client.DoJSON(http.MethodPost, config.ApiPath("/task/add"), opts, response)
+	httpclient.Client.DoJSON(http.MethodPost, config.ApiPath("/task/add"), opts, &response)
 	// TODO handle error
 
 	taskConfig := response["data"]

@@ -1,8 +1,12 @@
 package commands
 
 import (
-	"sir/cli/mock"
+	"fmt"
+	"net/http"
+	"sir/cli/config"
 	"sir/cli/utils"
+	"sir/lib/httpclient"
+	"sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -16,9 +20,14 @@ var CmdShow = cli.Command{
 }
 
 func ActionShow(c *cli.Context) error {
-	// TODO call sird api
+	taskName := c.Args().First()
+	// 调用api
+	var response map[string]models.Task
+	httpclient.Client.DoJSON(http.MethodGet, config.ApiPath("/task/"+taskName), nil, &response)
+	// TODO handle error
 
-	task := mock.GetTask()
+	fmt.Println(response)
+	task := response["data"]
 
 	utils.RenderTask(&task, c)
 

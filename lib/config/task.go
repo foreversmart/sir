@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"sir/lib/errors"
 	"sir/models"
+	"time"
 
 	"log"
 
@@ -12,12 +13,25 @@ import (
 )
 
 var (
-	taskConfigPath = UserHomeDir() + "/.sir/taskconfig"
+	taskConfigPath = UserHomeDir() + "/.sir/configs"
+	defaultLogPath = UserHomeDir() + "/.sir/logs"
 )
 
 func CreateTaskConfig(params *models.TaskConfig) (err error) {
+
 	if !params.IsValid() {
 		return errors.InvalidTaskConfig
+	}
+
+	params.CTime = time.Now()
+	if params.LogConfigs.ErrLogPath == "" {
+		params.LogConfigs.ErrLogPath = defaultLogPath
+	}
+	if params.LogConfigs.StdLogPath == "" {
+		params.LogConfigs.StdLogPath = defaultLogPath
+	}
+	if params.LogConfigs.RotateType == "" {
+		params.LogConfigs.RotateType = "day"
 	}
 
 	err = os.MkdirAll(taskConfigPath, 0700)
