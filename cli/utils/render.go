@@ -16,9 +16,6 @@ import (
 func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 	fmt.Println(Style.Header(" # TASK CONFIG INFO "))
 
-	fmt.Println("a", taskConfig.LogConfigs)
-	fmt.Println("a", taskConfig.Rules)
-
 	table := tablewriter.NewWriter(c.App.Writer)
 
 	table.SetRowLine(false)

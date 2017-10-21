@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"os/user"
 	"runtime"
 	"sir/lib/errors"
 	"sir/models"
@@ -13,6 +14,7 @@ import (
 )
 
 var (
+	AppHome        = UserHomeDir() + "/.sir"
 	taskConfigPath = UserHomeDir() + "/.sir/configs"
 	defaultLogPath = UserHomeDir() + "/.sir/logs"
 )
@@ -32,6 +34,12 @@ func CreateTaskConfig(params *models.TaskConfig) (err error) {
 	}
 	if params.LogConfigs.RotateType == "" {
 		params.LogConfigs.RotateType = "day"
+	}
+
+	user, _ := user.Current()
+	println("hello", user.Name, user.Username)
+	if params.User == "" {
+		params.User = user.Name
 	}
 
 	err = os.MkdirAll(taskConfigPath, 0700)
