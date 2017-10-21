@@ -1,15 +1,15 @@
-package command
+package commands
 
 import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
 var CmdStatus = cli.Command{
-  Name: "status",
-  UsageText: "",
+	Name:      "status",
+	UsageText: "",
 	Category:  "",
 	Usage:     "",
-	Action: ActionStatus,
+	Action:    ActionStatus,
 }
 
 func ActionStatus(c *cli.Context) error {

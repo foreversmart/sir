@@ -1,15 +1,15 @@
-package command
+package commands
 
 import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
 var CmdStart = cli.Command{
-  Name: "start",
-  UsageText: "",
+	Name:      "start",
+	UsageText: "",
 	Category:  "",
 	Usage:     "",
-	Action: ActionStart,
+	Action:    ActionStart,
 }
 
 func ActionStart(c *cli.Context) error {

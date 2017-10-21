@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"sir/cli/commands"
+
 	"github.com/ttacon/chalk"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -20,6 +22,7 @@ func initApp() *cli.App {
 	app.UsageText = "sir [global options] command [command options] [arguments...]"
 	app.CustomAppHelpTemplate = CustomAppHelpTemplate
 
+	app.Commands = commands.CliCmds
 	app.Action = func(c *cli.Context) error {
 		// default action
 		cli.ShowAppHelp(c)

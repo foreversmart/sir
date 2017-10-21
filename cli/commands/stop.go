@@ -1,15 +1,15 @@
-package command
+package commands
 
 import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
 var CmdStop = cli.Command{
-  Name: "stop",
-  UsageText: "",
+	Name:      "stop",
+	UsageText: "",
 	Category:  "",
 	Usage:     "",
-	Action: ActionStop,
+	Action:    ActionStop,
 }
 
 func ActionStop(c *cli.Context) error {
