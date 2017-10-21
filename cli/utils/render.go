@@ -123,7 +123,7 @@ func RenderTaskList(list []models.Task, c *cli.Context) {
 			v[2] = strconv.Itoa(int(t.Pid))
 			v[3] = Style.Success("running")
 
-			seconds := (int64(time.Now().Sub(time.Unix(t.UpTime, 0))) / 1e9) * 1e9
+			seconds := (int64(time.Now().Sub(time.Unix(t.UpTime/1000, 0))) / 1e9) * 1e9
 			v[5] = time.Duration(seconds).String()
 			v[6] = humanize.FormatFloat("###.##", t.CpuPercent) + " %"
 			v[7] = humanize.Bytes(t.Mem)
@@ -158,7 +158,7 @@ func RenderTaskState(task *models.TaskState, c *cli.Context) {
 		table.Append([]string{"", "RECV " + humanize.Bytes(task.Net.BytesSent)})
 	}
 
-	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime, 0))) / 1e9) * 1e9
+	seconds := (int64(time.Now().Sub(time.Unix(task.UpTime/1000, 0))) / 1e9) * 1e9
 	table.Append([]string{Style.Title("UP_TIME"), time.Duration(seconds).String()})
 
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
