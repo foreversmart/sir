@@ -59,15 +59,14 @@ func TaskState(pid int) (taskState *models.TaskState, err error) {
 	io, err := pro.IOCounters()
 	if err != nil {
 		log.Printf("pro.IOCounters(): %v", err)
-		return
 	}
+
 	// inject the io counter
 	taskState.IoCounter = io
 
 	stat, err := pro.Status()
 	if err != nil {
 		log.Printf("pro.Status(): %v", err)
-		return
 	}
 	// inject the stat
 	taskState.Stat = stat
