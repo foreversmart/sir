@@ -6,6 +6,7 @@ import (
 	"os/user"
 	"path"
 	"sir/models"
+	"strconv"
 	"sync"
 	"syscall"
 )
@@ -24,7 +25,7 @@ func NewTaskManager(workspace string) *TaskManager {
 	}
 }
 
-func (t *TaskManager) Start(task *models.Task) {
+func (t *TaskManager) Start(task *models.Task) (err error) {
 	// set work space
 	var (
 		workspace string
@@ -33,7 +34,7 @@ func (t *TaskManager) Start(task *models.Task) {
 	dir, _ := os.Getwd()
 	workspace = dir
 	if task.Workspace != "" {
-		workspace = task
+		workspace = task.Workspace
 	}
 
 	// set env
@@ -48,14 +49,18 @@ func (t *TaskManager) Start(task *models.Task) {
 
 	// set uid
 	attr := syscall.SysProcAttr{}
-	attr.Credential = &syscall.Credential{}
 	if task.User != "" {
 		taskUser, err := user.Lookup(task.User)
 		if err != nil {
 			return err
 		}
 
-		attr.Credential.Uid = taskUser.Uid
+		if attr.Credential == nil {
+			attr.Credential = &syscall.Credential{}
+		}
+
+		uitInt, _ := strconv.ParseUint(taskUser.Uid, 32, 10)
+		attr.Credential.Uid = uint32(uitInt)
 	}
 
 	// set group
@@ -65,14 +70,22 @@ func (t *TaskManager) Start(task *models.Task) {
 			return err
 		}
 
-		attr.Credential.Gid = taskGroup.Gid
+		if attr.Credential == nil {
+			attr.Credential = &syscall.Credential{}
+		}
+
+		groupInt, _ := strconv.ParseUint(taskGroup.Gid, 32, 10)
+		attr.Credential.Gid = uint32(groupInt)
 	}
 
 	// start task
 	procAttrs := os.ProcAttr{Dir: workspace, Env: env, Files: flows, Sys: &attr}
-	process, err := os.StartProcess(task.Cmd, []string{}, &procAttrs)
+
+	cmd, args := task.ParseCmd()
+	cmdArgs := append([]string{cmd}, args...)
+	process, err := os.StartProcess(cmd, cmdArgs, &procAttrs)
 	if err != nil {
-		return fmt.Errorf("can't create process %s: %s", os.Args[0], err)
+		return fmt.Errorf("can't create process %s: %v ||||%s", os.Args[0], os.Args, err)
 	}
 
 	task.Pid = process.Pid
@@ -82,7 +95,7 @@ func (t *TaskManager) Start(task *models.Task) {
 	return nil
 }
 
-func (t *TaskManager) AddTask(task models.Task) {
+func (t *TaskManager) AddTask(task *models.Task) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 
@@ -91,10 +104,12 @@ func (t *TaskManager) AddTask(task models.Task) {
 
 func (t *TaskManager) GenerateTaskFlow(name string) (flows []*os.File, err error) {
 	flows = make([]*os.File, 3)
-	flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return flows, err
-	}
+	//flows[0], err = os.OpenFile(path.Join(t.Workspace, name+".temp.in"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	//if err != nil {
+	//	return flows, err
+	//}
+
+	flows[0] = os.Stdin
 
 	flows[1], err = os.OpenFile(path.Join(t.Workspace, name+".temp.stdout"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
