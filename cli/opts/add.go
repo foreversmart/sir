@@ -1,8 +1,8 @@
 package opts
 
 import (
-	"net/url"
 	"sir/models"
+	"strings"
 
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -21,16 +21,10 @@ func ParseAddOpts(c *cli.Context) *AddOpts {
 	}
 
 	// env
-	env := make(map[string]string)
+	env := []string{}
 	envstr := c.String("env")
 	if envstr != "" {
-		m, err := url.ParseQuery(envstr)
-		if err != nil {
-			return &AddOpts{}
-		}
-		for k, v := range (map[string][]string)(m) {
-			env[k] = v[0]
-		}
+		env = strings.Split(envstr, "&")
 	}
 
 	// TODO parse other params...

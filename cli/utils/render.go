@@ -16,9 +16,6 @@ import (
 func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 	fmt.Println(Style.Header(" # TASK CONFIG INFO "))
 
-	fmt.Println("a", taskConfig.LogConfigs)
-	fmt.Println("a", taskConfig.Rules)
-
 	table := tablewriter.NewWriter(c.App.Writer)
 
 	table.SetRowLine(false)
@@ -37,13 +34,16 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 	table.Append([]string{Style.Title("RESTART_COUNT"), string(taskConfig.RestartCount)})
 
 	// ENV
-	envs := Format.KVMap(taskConfig.Env)
-	for i, env := range envs {
+	for i, env := range taskConfig.Env {
 		key := " "
 		if i == 0 {
 			key = Style.Title("ENV")
 		}
 		table.Append([]string{key, env})
+	}
+
+	if len(taskConfig.Env) == 0 {
+		table.Append([]string{Style.Title("ENV"), ""})
 	}
 
 	// RULES
@@ -53,6 +53,9 @@ func RenderTaskConfig(taskConfig *models.TaskConfig, c *cli.Context) {
 			key = Style.Title("RULES")
 		}
 		table.Append([]string{key, Format.KV(rule.Type, strconv.FormatFloat(rule.Threshold, 'f', 2, 64))})
+	}
+	if len(taskConfig.Rules) == 0 {
+		table.Append([]string{Style.Title("RULES"), ""})
 	}
 
 	table.Append([]string{Style.Title("ERR_LOG"), taskConfig.LogConfigs.ErrLogPath})

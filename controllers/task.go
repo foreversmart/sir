@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"sir/lib/config"
 	"sir/models"
-	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -18,7 +17,6 @@ func (task *TaskController) Add() {
 	var ob models.TaskConfig
 	json.Unmarshal(task.Ctx.Input.RequestBody, &ob)
 
-	ob.CTime = time.Now()
 	config.CreateTaskConfig(&ob)
 	// TODO handle error
 

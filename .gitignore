@@ -19,3 +19,4 @@ routers/commentsRouter___________________________*
 *.log
 
 test.temp.*
+debug
