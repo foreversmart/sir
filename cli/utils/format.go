@@ -11,15 +11,6 @@ func (_ *_Format) Enabled(enabled bool) string {
 	return Style.Disabled("disabled")
 }
 
-func (_ *_Format) KVMap(env map[string]string) []string {
-	out := []string{}
-	for k, v := range env {
-		out = append(out, k+": "+v)
-	}
-
-	return out
-}
-
 func (_ *_Format) KV(key string, value string) string {
 	return key + ": " + value
 }

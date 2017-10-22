@@ -28,8 +28,6 @@ func ActionList(c *cli.Context) error {
 
 	list := response["data"]
 
-	// list := mock.GetTaskList()
-
 	println()
 	fmt.Println(utils.Style.Success("[INFO]"), "TASK LIST\n")
 
