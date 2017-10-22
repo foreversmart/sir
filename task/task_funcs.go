@@ -18,23 +18,35 @@ import (
 
 func (t *TaskRuntime) TaskLog() {
 
+	stdOut := t.Task.TaskFlows.StdOut
+	stdErr := t.Task.TaskFlows.StdErr
+
+	stdLogPath := t.Task.TaskConfig.LogConfigs.StdLogPath + "/log.log"
+	errLogPath := t.Task.TaskConfig.LogConfigs.ErrLogPath + "/error.log"
+
+	maxSize := t.Task.TaskConfig.LogConfigs.MaxSize
+	maxBackups := t.Task.TaskConfig.LogConfigs.MaxBackups
+	maxAge := t.Task.TaskConfig.LogConfigs.MaxAge
+
 	// deal with std log
 	go func() {
+
 		logger := &lumberjack.Logger{
-			Filename:   t.Task.TaskConfig.LogConfigs.StdLogPath + "/log.log",
-			MaxSize:    10, // megabytes
-			MaxBackups: 0,
-			MaxAge:     0, //days
+			Filename:   stdLogPath,
+			MaxSize:    maxSize, // megabytes
+			MaxBackups: maxBackups,
+			MaxAge:     maxAge, //days
 		}
 
 		log.SetOutput(logger)
 
-		readline.ReadLine(t.Task.TaskFlows.StdOut, func(line string) {
+		readline.ReadLine(stdOut, func(line string) {
 
 			grSignal := make(chan bool)
 
 			select {
 			case <-t.TaskStdLogSignal:
+
 				grSignal <- true
 				return
 			}
@@ -42,12 +54,14 @@ func (t *TaskRuntime) TaskLog() {
 			logger.Write([]byte(line))
 
 			c := make(chan os.Signal, 1)
+
 			signal.Notify(c, syscall.SIGHUP)
 
 			go func() {
-				for {
 
+				for {
 					select {
+
 					case <-grSignal:
 						return
 					}
@@ -62,20 +76,21 @@ func (t *TaskRuntime) TaskLog() {
 	// deal with error log
 	go func() {
 		logger := &lumberjack.Logger{
-			Filename:   t.Task.TaskConfig.LogConfigs.ErrLogPath + "/error.log",
-			MaxSize:    10, // megabytes
-			MaxBackups: 0,
-			MaxAge:     0, //days
+			Filename:   errLogPath,
+			MaxSize:    maxSize, // megabytes
+			MaxBackups: maxBackups,
+			MaxAge:     maxAge, //days
 		}
 
 		log.SetOutput(logger)
 
-		readline.ReadLine(t.Task.TaskFlows.StdErr, func(line string) {
+		readline.ReadLine(stdErr, func(line string) {
 
 			grSignal := make(chan bool)
 
 			select {
 			case <-t.TaskErrorLogSignal:
+
 				grSignal <- true
 				return
 			}
@@ -83,12 +98,14 @@ func (t *TaskRuntime) TaskLog() {
 			logger.Write([]byte(line))
 
 			c := make(chan os.Signal, 1)
+
 			signal.Notify(c, syscall.SIGHUP)
 
 			go func() {
-				for {
 
+				for {
 					select {
+
 					case <-grSignal:
 						return
 					}
