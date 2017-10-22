@@ -52,15 +52,10 @@ func (task *TaskController) Remove() {
 // @router /task/:name [put]
 func (task *TaskController) Update() {
 	taskname := task.Ctx.Input.Param(":name")
-	// TODO just open editor
 
 	task.Data["json"] = map[string]interface{}{"data": config.GetTaskConfigFilePath(taskname)}
 
 	task.ServeJSON()
-}
-
-// @router /task/:name/rename [put]
-func (task *TaskController) Rename() {
 }
 
 // @router /task/:name [get]
@@ -84,8 +79,6 @@ func (task *TaskController) Show() {
 
 // @router /task [get]
 func (task *TaskController) List() {
-	// beego.Error("list")
-
 	runningTasks := TaskManager.Tasks
 
 	taskConfigs := config.ListAllTaskConfigs()
