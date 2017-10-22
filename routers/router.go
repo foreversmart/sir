@@ -8,4 +8,5 @@ import (
 
 func init() {
 	beego.Include(&controllers.TaskController{})
+	beego.SetStaticPath("/view", "public")
 }
