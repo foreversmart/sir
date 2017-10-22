@@ -1,0 +1,284 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.clr {
+  clear: both;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn {
+  border-radius: 4px;
+  padding: 6px 10px;
+  text-align: center;
+  text-shadow: none;
+  color: #fff;
+  background: #fff;
+}
+.btn.btn-primary {
+  background: #44c4e7;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.main {
+  -webkit-flex: 1;
+  order: 2;
+  background: #f5f5f5;
+}
+.main .header {
+  background: #44c4e7;
+  min-height: 80px;
+}
+.main .header form {
+  padding: 20px;
+  display: inline-block;
+}
+.main .header form img {
+  height: 35px;
+}
+.main .header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.main .header .nav-settings {
+  float: right;
+  line-height: 80px;
+  border-left: 1px solid #1cb3dc;
+}
+.main .header .nav-settings li {
+  display: inline-block;
+}
+.main .header .nav-settings li:hover {
+  background: #2dbde4;
+}
+.main .header .nav-settings li a {
+  padding: 0 20px;
+  color: #fff;
+  display: inline-block;
+  border-right: 1px solid #1cb3dc;
+}
+
+.messages {
+  order: 1;
+  width: 400px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+}
+.messages h1 {
+  margin: 0;
+  padding: 20px;
+  font-weight: 400;
+  color: #777;
+  border-bottom: 1px solid #ddd;
+}
+.messages form {
+  padding: 20px;
+  background: #fcfcfc;
+}
+.messages form input[type="search"] {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-sizing: border-box;
+  outline: none;
+}
+.messages .message-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-bottom: 1px solid #ddd;
+}
+.messages .message-list li {
+  background: #f8f6f4;
+  transition: background-color 0.3s ease;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 3px solid #1cb3dc;
+  padding: 10px 20px;
+  display: flex;
+  cursor: pointer;
+}
+.messages .message-list li input[type="checkbox"] {
+  appearance: none;
+  cursor: pointer;
+  margin: 5px 10px 0 0;
+  order: 1;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+.messages .message-list li input[type="checkbox"]:checked {
+  background: #efefef;
+}
+.messages .message-list li .preview {
+  flex: 1;
+  order: 2;
+}
+.messages .message-list li .preview h3 {
+  margin: 0;
+  font-weight: 400;
+  color: #333;
+}
+.messages .message-list li .preview h3 small {
+  float: right;
+  color: #aaa;
+  font-size: 0.8125rem;
+}
+.messages .message-list li .preview p {
+  color: #888;
+  margin: 5px 0;
+  max-width: 331px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.messages .message-list li:hover {
+  background: #fff;
+}
+.messages .message-list li.active {
+  background: #fd9162;
+  border-right: 3px solid rgba(0, 0, 0, 0.1);
+}
+.messages .message-list li.active .preview h3,
+.messages .message-list li.active .preview h3 small,
+.messages .message-list li.active .preview p {
+  color: #fff;
+}
+.messages .message-list li.new {
+  background: #fff;
+  border-right: 3px solid #44c4e7;
+}
+
+.message {
+  -webkit-flex: 1;
+  order: 2;
+  background: #fff;
+}
+.message h2 {
+  margin: 0;
+  padding: 20px 30px;
+  font-weight: 400;
+}
+.message .meta-data {
+  margin: 10px 30px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  line-height: 50px;
+  color: #888;
+}
+.message .meta-data .user {
+  color: #fd9162;
+}
+.message .meta-data img {
+  display: inline;
+  vertical-align: middle;
+  margin-right: 20px;
+  border-radius: 3px;
+}
+.message .meta-data .date {
+  float: right;
+  color: #aaa;
+}
+.message .body {
+  padding: 20px 30px;
+}
+.message .action {
+  background: #fcfcfc;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 30px;
+}
+.message .action .options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.message .action .options li {
+  float: left;
+}
+.message .action .options li:first-child {
+  border-right: 1px solid #ddd;
+}
+.message .action .options li:first-child a {
+  padding-left: 0;
+}
+.message .action .options li a {
+  color: #888;
+  padding: 0 10px;
+}
+.message .action .options li a.active {
+  color: #333;
+}
+.message .action .textarea {
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  position: relative;
+  margin: 20px 0;
+}
+.message .action .textarea:before {
+  content: "";
+  display: block;
+  border: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+  position: absolute;
+  top: -19px;
+  left: 25px;
+  -webkit-filter: drop-shadow(0 -1px 0 #ddd);
+}
+.message .action .textarea textarea {
+  width: 100%;
+  min-height: 300px;
+  appearance: none;
+  border: none;
+  resize: none;
+  outline: none;
+  margin-bottom: 50px;
+}
+.message .action .textarea .fileupload {
+  background: #fcfcfc;
+  border: 1px solid #ddd;
+  padding: 10px;
+  color: #888;
+  justify-content: space-between;
+}
+.message .action .textarea .fileupload .fileinfo {
+  flex: 1;
+}
+.message .action .textarea .fileupload .progress {
+  width: 80%;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 2px;
+}
+.message .action .textarea .fileupload .progress .bar {
+  background: #44c4e7;
+  width: 65%;
+  text-align: right;
+  color: #fff;
+  padding: 3px;
+  font-size: 0.75rem;
+}

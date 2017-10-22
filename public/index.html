@@ -5,11 +5,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
   <title>Document</title>
 </head>
 
 <body>
-  hello
+  <div class="container app">
+    <div class="main">
+      <header class="header">
+        <form action="">
+          <img src="logo.png" alt="">
+        </form>
+        <nav class="nav-settings">
+          <ul>
+            <li>
+              <a href="#">Go Hackathon!</a>
+            </li>
+            <li>
+              <a href="#" class="icon icon-gear"></a>
+            </li>
+          </ul>
+        </nav>
+        <div class="clr"></div>
+      </header>
+      <div class="container">
+        <div class="messages">
+          <h1>Tasks
+            <span class="icon icon-arrow-down"></span>
+          </h1>
+          <form action="">
+            <input type="search" class="search" placeholder="Search Inbox" />
+          </form>
+          <ul class="message-list" id="task-list">
+          </ul>
+        </div>
+        <section class="message">
+          <h2 id="task-title">
+            <span class="icon icon-star-large"></span> The brand new season of Top Gear
+            <span class="icon icon-reply-large"></span>
+            <span class="icon icon-delete-large"></span>
+          </h2>
+          <div class="meta-data" id="task-actions">
+            <p>
+              <img src="http://placehold.it/40x40" class="avatar" alt="" /> Jeremy Clarkson to
+              <span class="user">me</span>
+              <span class="date">July 15, 2013</span>
+            </p>
+          </div>
+          <div class="body" id="task-body">
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
