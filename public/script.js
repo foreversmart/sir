@@ -17,6 +17,7 @@ function loadTasks() {
     .then(data => {
       tasks = data
       renderTasks()
+      renderDetail()
     })
 }
 
@@ -40,9 +41,25 @@ function renderTasks() {
   elTaskList.innerHTML = html.join("")
 }
 
+function renderDetail() {
+  const t = tasks[selectedIndex]
+  elTaskTitle.innerHTML =
+    tasks[selectedIndex].name + " [" + tasks[selectedIndex].cmd + "]"
+
+  elTaskActions.innerHTML = `
+<p>
+  <a href="" class="user">Start</a>
+  <a href="" class="user">Stop</a>
+  <a href="" class="user">Restart</a>
+  <span class="date">Created Time: ${t.c_time}</span>
+</p> 
+  `
+}
+
 function selectIndex(index) {
   selectedIndex = index
   renderTasks()
+  renderDetail()
 }
 
 function bind() {
