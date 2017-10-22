@@ -120,6 +120,13 @@ func (t *TaskRuntime) TaskLog() {
 }
 
 func (t *TaskRuntime) TaskStateFunc() {
+
+	if t.Task.TaskConfig.Monitor {
+		go func() {
+			monitor.StartMonitor()
+		}()
+	}
+
 	for {
 		select {
 		// killz
@@ -145,7 +152,7 @@ func (t *TaskRuntime) TaskStateFunc() {
 			// update task state
 			t.TaskState = state
 
-			time.Sleep(time.Second)
+			time.Sleep(time.Second * 3)
 		}
 	}
 }

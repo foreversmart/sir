@@ -5,11 +5,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <script src="lib/bootstrap.min.js"></script>
   <title>Document</title>
 </head>
 
 <body>
-  hello
+  <div class="container app">
+    <div class="main">
+      <header class="header">
+        <form action="">
+          <img src="logo.png" alt="">
+        </form>
+        <nav class="nav-settings">
+          <ul>
+            <li>
+              <a href="#">Go Hackathon!</a>
+            </li>
+            <li>
+              <a href="#" class="icon icon-gear"></a>
+            </li>
+          </ul>
+        </nav>
+        <div class="clr"></div>
+      </header>
+      <div class="container">
+        <div class="messages">
+          <h1>Tasks
+            <span class="icon icon-arrow-down"></span>
+          </h1>
+          <form action="">
+            <input type="search" class="search" placeholder="Search Inbox" />
+          </form>
+          <ul class="message-list" id="task-list">
+          </ul>
+        </div>
+        <section class="message">
+          <h2 id="task-title">
+            [Task Title]
+          </h2>
+          <div class="meta-data" id="task-actions">
+            <p>
+              <a href="" class="user">Start</a>
+              <a href="" class="user">Stop</a>
+              <a href="" class="user">Restart</a>
+              <span class="date">Up Time: 3h28m</span>
+            </p>
+          </div>
+          <div class="body" id="task-body">
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
