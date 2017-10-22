@@ -6,6 +6,9 @@ const elTaskBody = document.getElementById("task-body")
 let tasks = []
 let selectedIndex = 0
 
+bind()
+loadTasks()
+
 function loadTasks() {
   fetch("/task")
     .then(res => {
@@ -54,6 +57,75 @@ function renderDetail() {
   <span class="date">Created Time: ${t.c_time}</span>
 </p> 
   `
+
+  elTaskBody.innerHTML = `
+  <table class="table">
+    <tr>
+      <td>NAME</td>
+      <td>${t.name}</td>
+    </tr>
+  <tr>
+    <td>PID</td>
+    <td>${t.pid}</td>
+  </tr>
+  <tr>
+    <td>CPU</td>
+    <td>${t.cpu}</td>
+  </tr>
+  <tr>
+    <td>MEMORY</td>
+    <td>${t.mem}</td>
+  </tr>
+  <tr>
+    <td>LOAD</td>
+    <td>${t.load}</td>
+  </tr>
+  <tr>
+    <td>STAT</td>
+    <td>${t.stat}</td>
+  </tr>
+  <tr>
+    <td>UP TIME</td>
+    <td>${t.up_time}</td>
+  </tr>
+    <tr>
+      <td>EXEC</td>
+      <td>${t.cmd}</td>
+    </tr>
+    <tr>
+      <td>WATCH</td>
+      <td>${t.watch}</td>
+    </tr>
+    <tr>
+      <td>WATCH DIR</td>
+      <td>${t.watch_dir}</td>
+    </tr>
+    <tr>
+      <td>USER</td>
+      <td>${t.user}</td>
+    </tr>
+    <tr>
+      <td>GROUP</td>
+      <td>${t.group}</td>
+    </tr>
+    <tr>
+      <td>PRIORITY</td>
+      <td>${t.priority}</td>
+    </tr>
+    <tr>
+      <td>AUTO START</td>
+      <td>${t.auto_start}</td>
+    </tr>
+    <tr>
+      <td>ERR LOG</td>
+      <td>${t.err_log}</td>
+    </tr>
+    <tr>
+      <td>STD LOG</td>
+      <td>${t.std_log}</td>
+    </tr>
+  </table> 
+  `
 }
 
 function selectIndex(index) {
@@ -68,9 +140,6 @@ function bind() {
     selectIndex(index)
   })
 }
-
-bind()
-loadTasks()
 
 function eventDelegate(parentSelector, targetSelector, events, foo) {
   // 触发执行的函数
