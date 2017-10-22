@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"sir/lib/config"
 	"sir/lib/monitor"
 	"sir/lib/psutil"
 	"sir/models"
@@ -22,7 +21,7 @@ func (t *TaskRuntime) TaskLog() {
 	// deal with std log
 	go func() {
 		logger := &lumberjack.Logger{
-			Filename:   config.DefaultLogPath + "/log.log",
+			Filename:   t.Task.TaskConfig.LogConfigs.StdLogPath + "/log.log",
 			MaxSize:    10, // megabytes
 			MaxBackups: 0,
 			MaxAge:     0, //days
@@ -63,7 +62,7 @@ func (t *TaskRuntime) TaskLog() {
 	// deal with error log
 	go func() {
 		logger := &lumberjack.Logger{
-			Filename:   config.DefaultLogPath + "/error.log",
+			Filename:   t.Task.TaskConfig.LogConfigs.ErrLogPath + "/error.log",
 			MaxSize:    10, // megabytes
 			MaxBackups: 0,
 			MaxAge:     0, //days
