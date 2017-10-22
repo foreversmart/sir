@@ -2,9 +2,10 @@ package task
 
 import (
 	"fmt"
+	"sir/models"
+
 	"os"
 	"os/user"
-	"sir/models"
 	"strconv"
 	"syscall"
 )
@@ -108,6 +109,7 @@ func (t *TaskRuntime) Stop() (err error) {
 	err = process.Kill()
 	if err == nil {
 		t.Pid = -1
+
 	}
 
 	return err

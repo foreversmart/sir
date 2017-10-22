@@ -62,6 +62,7 @@ type TaskConfig struct {
 	Priority        int           `json:"priority"` // higher is lower
 	AutoRestart     bool          `json:"autorestart"`
 	AutoStart       bool          `json:"auto_start"`
+	Monitor         bool          `json:"monitor"`
 	RestartInterval int           `json:"restart_interval"` // seconds
 	Rules           []*RuleConfig `json:"rules"`
 	LogConfigs      *LogConfig    `json:"log_configs"`

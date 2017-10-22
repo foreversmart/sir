@@ -2,17 +2,19 @@ package task
 
 import (
 	"fmt"
-	"github.com/fsnotify/fsnotify"
-	"github.com/jprichardson/readline-go"
-	"github.com/natefinch/lumberjack"
 	"log"
 	"os"
 	"os/signal"
 	"sir/lib/config"
+	"sir/lib/monitor"
 	"sir/lib/psutil"
 	"sir/models"
 	"syscall"
 	"time"
+
+	"github.com/fsnotify/fsnotify"
+	"github.com/jprichardson/readline-go"
+	"github.com/natefinch/lumberjack"
 )
 
 func (t *TaskRuntime) TaskLog() {
@@ -111,6 +113,10 @@ func (t *TaskRuntime) TaskStateFunc() {
 			state, err := psutil.TaskState(t.Pid)
 			if err != nil {
 				fmt.Println(err)
+			}
+
+			if t.Task.TaskConfig.Monitor {
+				monitor.PushMonitorData(state)
 			}
 
 			if state == nil {
