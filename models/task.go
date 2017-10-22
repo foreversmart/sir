@@ -86,4 +86,7 @@ type LogConfig struct {
 	StdLogPath string `json:"std_log_path"`
 	RotateType string `json:"rotate_type"`
 	Limit      int    `json:"limit"`
+	MaxSize    int    `json:"max_size"`    // MaxSize is the maximum size in megabytes of the log file before it gets rotated
+	MaxBackups int    `json:"max_backups"` // MaxBackups is the maximum number of old log files to retain
+	MaxAge     int    `json:"max_age"`     // MaxAge is the maximum number of days to retain old log files
 }
