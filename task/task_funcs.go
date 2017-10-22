@@ -14,6 +14,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/jprichardson/readline-go"
 	"github.com/natefinch/lumberjack"
+	"path/filepath"
 )
 
 func (t *TaskRuntime) TaskLog() {
@@ -21,7 +22,7 @@ func (t *TaskRuntime) TaskLog() {
 	stdOut := t.Task.TaskFlows.StdOut
 	stdErr := t.Task.TaskFlows.StdErr
 
-	stdLogPath := t.Task.TaskConfig.LogConfigs.StdLogPath + "/log.log"
+	stdLogPath := t.Task.TaskConfig.LogConfigs.StdLogPath + "/fmt.log"
 	errLogPath := t.Task.TaskConfig.LogConfigs.ErrLogPath + "/error.log"
 
 	maxSize := t.Task.TaskConfig.LogConfigs.MaxSize
@@ -153,6 +154,7 @@ func (t *TaskRuntime) TaskWatchFunc() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
+
 	}
 
 	defer watcher.Close()
@@ -161,20 +163,18 @@ func (t *TaskRuntime) TaskWatchFunc() {
 		for {
 			select {
 			case event := <-watcher.Events:
-				log.Println("event:", event)
 				if event.Op&fsnotify.Write == fsnotify.Write {
+					fmt.Println("event:", event)
 					err = t.Stop()
 					if err != nil {
-						log.Println("watch stop", err)
+						fmt.Println("watch stop", err)
 					}
 
 					err = t.Start()
 					if err != nil {
-						log.Println("watch start", err)
+						fmt.Println("watch start", err)
 					}
 				}
-			case err := <-watcher.Errors:
-				log.Println("error:", err)
 			case <-t.TaskStateSignal:
 				return
 
@@ -182,11 +182,33 @@ func (t *TaskRuntime) TaskWatchFunc() {
 		}
 	}()
 
-	err = watcher.Add(t.WatchDir)
-	if err != nil {
-		log.Fatal(err)
-	}
+	err = filepath.Walk(t.WatchDir, func(path string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
 
+		}
+
+		if f.IsDir() {
+			err = watcher.Add(path)
+			fmt.Println(path)
+			if err != nil {
+				log.Fatal(err)
+			}
+			return nil
+		}
+
+		if err != nil {
+			fmt.Printf("filepath.Walk() returned %v\n", err)
+			return err
+		}
+
+		return nil
+
+	})
+
+	if err != nil {
+		fmt.Printf("filepath.Walk() %v\n", err)
+	}
 }
 
 func (t *TaskRuntime) StopFunc() {

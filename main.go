@@ -6,11 +6,13 @@ import (
 	_ "sir/routers"
 
 	"github.com/astaxie/beego"
+	"sir/lib/daemon"
 )
 
 func main() {
 	appHome := config.AppHome
 	os.MkdirAll(appHome, 0700)
+
 	// TODO handle error
 	errLog := appHome + "/" + beego.AppConfig.String("err_log")
 	stdLog := appHome + "/" + beego.AppConfig.String("std_log")
@@ -22,8 +24,8 @@ func main() {
 		os.Create(stdLog)
 	}
 
-	// err := daemon.Daemon(stdLog, errLog)
-	// beego.Error(err)
+	err := daemon.Daemon(stdLog, errLog)
+	beego.Error(err)
 
 	beego.Run()
 }
