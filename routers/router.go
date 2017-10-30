@@ -7,6 +7,6 @@ import (
 )
 
 func init() {
-	beego.SetStaticPath("/public", "public")
 	beego.Include(&controllers.TaskController{})
+	beego.SetStaticPath("/public", "public")
 }
