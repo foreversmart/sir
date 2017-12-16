@@ -1,10 +1,11 @@
 package task
 
 import (
-	"github.com/stretchr/testify/assert"
-	"sir/models"
 	"testing"
 	"time"
+
+	"github.com/foreversmart/sir/models"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTaskManager_StartTask(t *testing.T) {

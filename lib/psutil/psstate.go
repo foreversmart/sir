@@ -1,7 +1,7 @@
 package psutil
 
 import (
-	"sir/models"
+	"github.com/foreversmart/sir/models"
 
 	"log"
 

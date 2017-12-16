@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
-	"sir/lib/config"
-	"sir/models"
 
-	"sir/task"
+	"github.com/foreversmart/sir/lib/config"
+	"github.com/foreversmart/sir/models"
+	"github.com/foreversmart/sir/task"
 
 	"github.com/astaxie/beego"
 )
