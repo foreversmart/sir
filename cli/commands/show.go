@@ -2,10 +2,11 @@ package commands
 
 import (
 	"net/http"
-	"sir/cli/config"
-	"sir/cli/utils"
-	"sir/lib/httpclient"
-	"sir/models"
+
+	"github.com/foreversmart/sir/cli/config"
+	"github.com/foreversmart/sir/cli/utils"
+	"github.com/foreversmart/sir/lib/httpclient"
+	"github.com/foreversmart/sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

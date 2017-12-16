@@ -1,8 +1,9 @@
 package opts
 
 import (
-	"sir/models"
 	"strings"
+
+	"github.com/foreversmart/sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

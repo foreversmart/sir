@@ -2,13 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"sir/models"
 	"sort"
 	"strconv"
 	"time"
 
-	"github.com/dustin/go-humanize"
-
+	humanize "github.com/dustin/go-humanize"
+	"github.com/foreversmart/sir/models"
 	"github.com/yanhao1991/tablewriter"
 	cli "gopkg.in/urfave/cli.v1"
 )
