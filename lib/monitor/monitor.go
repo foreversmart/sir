@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"log"
 	"net/http"
-	"sir/models"
 	"strconv"
+
+	"github.com/foreversmart/sir/models"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

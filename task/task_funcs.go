@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"sir/lib/monitor"
-	"sir/lib/psutil"
-	"sir/models"
+	"github.com/foreversmart/sir/lib/monitor"
+	"github.com/foreversmart/sir/lib/psutil"
+	"github.com/foreversmart/sir/models"
 	"syscall"
 	"time"
 

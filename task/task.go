@@ -2,7 +2,8 @@ package task
 
 import (
 	"fmt"
-	"sir/models"
+
+	"github.com/foreversmart/sir/models"
 
 	"os"
 	"os/user"
