@@ -26,7 +26,10 @@ func (task *TaskController) Start() {
 	})
 	if err != nil {
 		beego.Error("TaskManager.StartTask", err)
+		return
 	}
+
+	task.ServeJSON()
 }
 
 // @router /task/:name/restart [post]
@@ -40,6 +43,7 @@ func (task *TaskController) Restart() {
 	err := TaskManager.RemoveTask(taskname)
 	if err != nil {
 		beego.Error("TaskManager.RemoveTask", err)
+		return
 	}
 
 	conf, err := config.GetTaskConfig(taskname)
@@ -53,7 +57,10 @@ func (task *TaskController) Restart() {
 	})
 	if err != nil {
 		beego.Error("TaskManager.StartTask", err)
+		return
 	}
+
+	task.ServeJSON()
 }
 
 // @router /task/:name/stop [post]
@@ -67,9 +74,13 @@ func (task *TaskController) Stop() {
 	err := TaskManager.RemoveTask(taskname)
 	if err != nil {
 		beego.Error("TaskManager.RemoveTask", err)
+		return
 	}
+
+	task.ServeJSON()
 }
 
 // @router /task/:name/send [post]
 func (task *TaskController) Send() {
+	// TODO
 }
