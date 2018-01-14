@@ -4,9 +4,10 @@ import (
 	"io/ioutil"
 	"os"
 	"runtime"
-	"sir/lib/errors"
-	"sir/models"
 	"time"
+
+	"github.com/foreversmart/sir/lib/errors"
+	"github.com/foreversmart/sir/models"
 
 	"log"
 

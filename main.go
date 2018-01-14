@@ -2,8 +2,10 @@ package main
 
 import (
 	"os"
-	"sir/lib/config"
-	_ "sir/routers"
+
+	_ "github.com/foreversmart/sir/routers"
+
+	"github.com/foreversmart/sir/lib/config"
 
 	"github.com/astaxie/beego"
 	"sir/lib/daemon"

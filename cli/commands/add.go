@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"sir/cli/config"
-	"sir/cli/opts"
-	"sir/cli/utils"
-	"sir/lib/httpclient"
-	"sir/models"
 	"strings"
+
+	"github.com/foreversmart/sir/cli/config"
+	"github.com/foreversmart/sir/cli/opts"
+	"github.com/foreversmart/sir/cli/utils"
+	"github.com/foreversmart/sir/lib/httpclient"
+	"github.com/foreversmart/sir/models"
 
 	cli "gopkg.in/urfave/cli.v1"
 )

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"sir/controllers"
+	"github.com/foreversmart/sir/controllers"
 
 	"github.com/astaxie/beego"
 )
